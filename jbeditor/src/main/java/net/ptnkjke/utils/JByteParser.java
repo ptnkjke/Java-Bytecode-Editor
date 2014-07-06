@@ -4,6 +4,7 @@ import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import org.apache.bcel.generic.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Lopatin on 06.07.2014.
@@ -22,35 +23,57 @@ public class JByteParser {
         InstructionList list;
 
         String[] lines = code.split("\n");
+        String[] wLines = new String[lines.length];
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+
+            // Убираем последние и первые пробелы, комментарии
+            String tLine = line.substring(0, line.indexOf("//")).replaceAll("\\s+$", "").replaceAll("^\\s+", "");
+            wLines[i] = tLine;
+        }
 
 
-        int readAll = 0;
         int curLine = 0;
-
-        while (readAll != curLine) {
-            readAll += parseLine(lines, curLine);
+        int lastLine;
+        while (wLines.length != curLine) {
+            lastLine = curLine;
+            curLine += parseLine(wLines, curLine);
+            if (lastLine == curLine) {
+                break;
+            }
         }
 
         // Обработка BranchStructs!
         for (BranchStruct branchStruct : branchStructs) {
-            InstructionHandle instructionHandle = instructionHandleList.get(branchStruct.label);
+            InstructionHandle instructionHandle = getHandleByPos(branchStruct.label);
             branchStruct.instruction.setTarget(instructionHandle);
         }
 
         // Обработка TABLESELECT + LOOCKUPSELECT
         for (SelectStruct selectStruct : selectStructs) {
-            InstructionHandle target = instructionHandleList.get(selectStruct.target);
+            InstructionHandle target = getHandleByPos(selectStruct.target);
             Select select = selectStruct.instruction;
             select.setTarget(target);
 
             for (Integer i : selectStruct.instructs) {
-                InstructionHandle handle = instructionHandleList.get(i);
+                InstructionHandle handle = getHandleByPos(i);
                 select.getTargets()[i] = handle;
             }
         }
 
     }
 
+    public InstructionHandle getHandleByPos(int target) {
+        int b = 0;
+        for (InstructionHandle handle : instructionHandleList) {
+            if (b == target) {
+                return handle;
+            }
+            b += handle.getInstruction().getLength();
+        }
+
+        return null;
+    }
 
     /**
      * Сколько строк обработано
@@ -58,8 +81,9 @@ public class JByteParser {
      * @return
      */
     private int parseLine(String[] lines, int numLine) {
-        String instructionName = null;
-        String[] args = null;
+        String[] _s = lines[numLine].split(" ");
+        String instructionName = _s[0];
+        String[] args = Arrays.copyOfRange(_s, 1, _s.length);
         InstructionHandle instructionHandle = null;
         Instruction instruction = null;
         // ARITHMETIC
@@ -174,7 +198,7 @@ public class JByteParser {
                 break;
         }
         if (instruction != null) {
-            instructionHandle = instructions.append(instruction);
+            instructionHandle = instructions.append((ArithmeticInstruction) instruction);
             instructionHandleList.add(instructionHandle);
             return 1;
         }
@@ -232,7 +256,7 @@ public class JByteParser {
         }
 
         if (instruction != null) {
-            instructionHandle = instructions.append(instruction);
+            instructionHandle = instructions.append((ArrayInstruction) instruction);
             instructionHandleList.add(instructionHandle);
             return 1;
         }
@@ -301,7 +325,7 @@ public class JByteParser {
                 break;
         }
         if (instruction != null) {
-            instructionHandle = instructions.append(instruction);
+            instructionHandle = instructions.append((BranchInstruction) instruction);
             instructionHandleList.add(instructionHandle);
 
             branchStructs.add(new BranchStruct((BranchInstruction) instruction, Integer.parseInt(args[0])));
@@ -316,7 +340,7 @@ public class JByteParser {
                 InstructionHandle defaultTarget = null;
                 instruction = new TABLESWITCH(match, targets, defaultTarget);
 
-                instructionHandle = instructions.append(instruction);
+                instructionHandle = instructions.append((TABLESWITCH) instruction);
                 instructionHandleList.add(instructionHandle);
 
                 int counter = 0;
@@ -343,7 +367,7 @@ public class JByteParser {
                 defaultTarget = null;
                 instruction = new LOOKUPSWITCH(match, targets, defaultTarget);
 
-                instructionHandle = instructions.append(instruction);
+                instructionHandle = instructions.append((LOOKUPSWITCH) instruction);
                 instructionHandleList.add(instructionHandle);
 
                 counter = 0;
@@ -416,7 +440,7 @@ public class JByteParser {
         }
 
         if (instruction != null) {
-            instructionHandle = instructions.append(instruction);
+            instructionHandle = instructions.append((ConversionInstruction) instruction);
             instructionHandleList.add(instructionHandle);
             return 1;
         }
@@ -480,6 +504,10 @@ public class JByteParser {
                 int index = Integer.parseInt(args[1]);
                 instruction = new INVOKEDYNAMIC((short) n, index);
                 break;
+            case "invokespecial":
+                n = Integer.parseInt(args[0]);
+                instruction = new INVOKESPECIAL(n);
+                break;
             case "new":
                 n = Integer.parseInt(args[0]);
                 instruction = new NEW(n);
@@ -487,7 +515,7 @@ public class JByteParser {
         }
 
         if (instruction != null) {
-            instructionHandle = instructions.append(instruction);
+            instructionHandle = instructions.append((CPInstruction) instruction);
             instructionHandleList.add(instructionHandle);
             return 1;
         }
@@ -664,7 +692,7 @@ public class JByteParser {
         }
 
         if (instruction != null) {
-            instructionHandle = instructions.append(instruction);
+            instructionHandle = instructions.append((LocalVariableInstruction) instruction);
             instructionHandleList.add(instructionHandle);
             return 1;
         }
@@ -688,12 +716,12 @@ public class JByteParser {
                 instruction = new LRETURN();
                 break;
             case "return":
-                instruction = new ARETURN();
+                instruction = new RETURN();
                 break;
 
         }
         if (instruction != null) {
-            instructionHandle = instructions.append(instruction);
+            instructionHandle = instructions.append((ReturnInstruction) instruction);
             instructionHandleList.add(instructionHandle);
             return 1;
         }
@@ -730,7 +758,7 @@ public class JByteParser {
                 break;
         }
         if (instruction != null) {
-            instructionHandle = instructions.append(instruction);
+            instructionHandle = instructions.append((StackInstruction) instruction);
             instructionHandleList.add(instructionHandle);
             return 1;
         }

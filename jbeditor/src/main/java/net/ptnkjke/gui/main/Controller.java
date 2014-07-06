@@ -47,6 +47,8 @@ public class Controller {
 
     private ClassGen classGen;
 
+    private boolean classFile = false;
+
     @FXML
     private void initialize() {
 
@@ -111,6 +113,7 @@ public class Controller {
         if (file.getName().contains(".jar")) {
             openJarFile(file);
         } else {
+            classFile = true;
             openClassFile(file);
         }
     }
@@ -229,7 +232,11 @@ public class Controller {
         }
     }
 
-    private void saveClassFile(File file) {
-
+    private void saveClassFileTest(JavaClass javaClass) {
+        try {
+            javaClass.dump(new File("temp" + File.separator + "dumped.class"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

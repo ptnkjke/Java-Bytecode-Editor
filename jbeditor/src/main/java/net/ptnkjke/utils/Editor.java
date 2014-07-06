@@ -213,6 +213,7 @@ public class Editor extends InstructionHandleWorker {
     //
     @Override
     public void visitAALOAD(InstructionHandle instructionHandle) {
+        AALOAD aaload = (AALOAD) instructionHandle.getInstruction();
         base(instructionHandle);
     }
 
@@ -621,58 +622,129 @@ public class Editor extends InstructionHandleWorker {
 
 
     @Override
-    public void visitALOAD(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitALOAD(InstructionHandle handle) {
+        ALOAD instruction = (ALOAD) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.ALOAD) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitDLOAD(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitDLOAD(InstructionHandle handle) {
+        DLOAD instruction = (DLOAD) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.DLOAD) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitFLOAD(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitFLOAD(InstructionHandle handle) {
+        FLOAD instruction = (FLOAD) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.FLOAD) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitLLOAD(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitLLOAD(InstructionHandle handle) {
+        LLOAD instruction = (LLOAD) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.LLOAD) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitILOAD(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitILOAD(InstructionHandle handle) {
+        ILOAD instruction = (ILOAD) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.ILOAD) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitASTORE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitASTORE(InstructionHandle handle) {
+        ASTORE instruction = (ASTORE) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.ASTORE) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitDSTORE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitDSTORE(InstructionHandle handle) {
+        DSTORE instruction = (DSTORE) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.DSTORE) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitFSTORE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitFSTORE(InstructionHandle handle) {
+        FSTORE instruction = (FSTORE) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.FSTORE) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitISTORE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitISTORE(InstructionHandle handle) {
+        ISTORE instruction = (ISTORE) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.ISTORE) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitLSTORE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitLSTORE(InstructionHandle handle) {
+        LSTORE instruction = (LSTORE) handle.getInstruction();
+        int index = instruction.getIndex();
+
+        if (instruction.getOpcode() == Constants.LSTORE) {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        } else {
+            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+        }
     }
 
     @Override
-    public void visitIINC(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitIINC(InstructionHandle handle) {
+        IINC iinc = (IINC) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[iinc.getOpcode()] + " " + iinc.getIndex() + " " + iinc.getIncrement() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override

@@ -12,18 +12,15 @@ import javafx.scene.text.TextFlow;
 import net.ptnkjke.gui.main.model.classtree.Method;
 import net.ptnkjke.utils.Editor;
 import net.ptnkjke.utils.GraphVizCreator;
-import org.apache.bcel.generic.ClassGen;
-import org.apache.bcel.generic.InstructionHandle;
-import org.apache.bcel.generic.MethodGen;
+import net.ptnkjke.utils.JByteParser;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.generic.*;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 
 /**
@@ -34,15 +31,15 @@ public class Controller {
     private TextArea textArea;
     @FXML
     private ImageView imageView;
-    @FXML
-    private ScrollPane scrollPane;
-    @FXML
-    private TextArea console;
 
     private GraphVizCreator graphVizCreator;
 
+    private ClassGen classGen;
+    private Method method;
+
     public void setMethod(Method method) {
-        ClassGen classGen = method.getClassGen();
+        this.method = method;
+        classGen = method.getClassGen();
         int num = method.getMethodIndex();
 
         MethodGen methodGen = new MethodGen(classGen.getMethodAt(num),
@@ -88,21 +85,53 @@ public class Controller {
 
     }
 
-    public void runConsole() {
-        String text = console.getText();
+    public void testSave() {
+        JByteParser jByteParser = new JByteParser();
+        ConstantPoolGen constantPoolGen = classGen.getConstantPool();
 
-        ScriptEngineManager factory = new ScriptEngineManager();
+        jByteParser.parse(textArea.getText(), constantPoolGen);
+        InstructionList instructionList = jByteParser.getInstructions();
 
-        ScriptEngine engine = factory.getEngineByName("nashorn");
+        int num = method.getMethodIndex();
+        org.apache.bcel.classfile.Method old = classGen.getMethodAt(num);
+
+        MethodGen mg = new MethodGen(old, classGen.getClassName(), classGen.getConstantPool());
+        mg.setInstructionList(instructionList);
+        classGen.setMethodAt(mg.getMethod(), num);
+
+
+        File oldText = new File("temp" + File.separator + "old.text");
+        File newText = new File("temp" + File.separator + "new.text");
 
         try {
-            engine.getBindings(ScriptContext.GLOBAL_SCOPE).put("viz", graphVizCreator);
-            engine.eval(text);
-        } catch (ScriptException e) {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(oldText));
+            writer.write(textArea.getText());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        StringBuilder sb = new StringBuilder();
+        InstructionHandle handle = mg.getInstructionList().getStart();
+
+        if (handle != null) {
+            do {
+                Editor editor = new Editor();
+                editor.visit(handle);
+
+                sb.append(editor.getResult()).append("\n");
+                handle = handle.getNext();
+            } while (handle != null);
+        }
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(newText));
+            writer.write(sb.toString());
+            writer.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     public TextArea getTextArea() {
         return textArea;
@@ -110,13 +139,5 @@ public class Controller {
 
     public void setTextArea(TextArea textArea) {
         this.textArea = textArea;
-    }
-
-    public TextArea getConsole() {
-        return console;
-    }
-
-    public void setConsole(TextArea console) {
-        this.console = console;
     }
 }
