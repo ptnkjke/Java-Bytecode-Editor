@@ -1,26 +1,20 @@
 package net.ptnkjke.gui.main.panes.methodpane;
 
-
 import javafx.fxml.FXML;
-
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 import net.ptnkjke.gui.main.model.classtree.Method;
 import net.ptnkjke.utils.Editor;
 import net.ptnkjke.utils.GraphVizCreator;
 import net.ptnkjke.utils.JByteParser;
-import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
 
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 /**
@@ -66,11 +60,11 @@ public class Controller {
         Image img = null;
 
         try {
-            do {
-                FileInputStream fileInputStream = new FileInputStream(image);
-                img = new Image(new FileInputStream(image));
-                fileInputStream.close();
-            } while (img.getWidth() == 0); // TODO: Очень странное место
+
+            FileInputStream fileInputStream = new FileInputStream(image);
+            img = new Image(new FileInputStream(image));
+            fileInputStream.close();
+
             imageView.setImage(img);
             imageView.setFitWidth(img.getWidth());
             imageView.setFitHeight(img.getHeight());
@@ -98,7 +92,7 @@ public class Controller {
         MethodGen mg = new MethodGen(old, classGen.getClassName(), classGen.getConstantPool());
         mg.setInstructionList(instructionList);
         classGen.setMethodAt(mg.getMethod(), num);
-
+/*
 
         File oldText = new File("temp" + File.separator + "old.text");
         File newText = new File("temp" + File.separator + "new.text");
@@ -130,7 +124,7 @@ public class Controller {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public TextArea getTextArea() {

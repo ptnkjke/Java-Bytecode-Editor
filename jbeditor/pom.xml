@@ -7,37 +7,27 @@
     <groupId>jbedit</groupId>
     <artifactId>jbedit</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>javafx</artifactId>
-            <version>2.2</version>
-            <scope>system</scope>
-            <systemPath>${java.home}\lib\jfxrt.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.bcel</groupId>
-            <artifactId>bcel</artifactId>
-        </dependency>
-
-    </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.bcel</groupId>
-                <artifactId>bcel</artifactId>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <modules>
         <module>../bcel</module>
     </modules>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.bcel</groupId>
+            <artifactId>bcel</artifactId>
+            <version>6.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.lingala.zip4j</groupId>
+            <artifactId>zip4j</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <resources>

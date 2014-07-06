@@ -27,6 +27,7 @@
 </MenuBar><ToolBar prefWidth="200.0">
   <items>
     <Button mnemonicParsing="false" onAction="#onButtonLoadClass" text="Open" />
+            <Button mnemonicParsing="false" onAction="#saveChange" text="Save Changes" />
   </items>
 </ToolBar><HBox prefHeight="347.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
          <children>

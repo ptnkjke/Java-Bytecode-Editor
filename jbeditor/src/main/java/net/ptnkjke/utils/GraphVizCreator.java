@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Lopatin on 05.07.2014.
@@ -98,10 +99,11 @@ public class GraphVizCreator extends InstructionHandleWorker {
         if (!workDir.exists()) {
             workDir.mkdirs();
         }
-        File temp = new File(workDir, "temp.txt");
+        String nameRandom = getRandomName();
+        File temp = new File(workDir, nameRandom + ".txt");
 
-        String path = "temp" + File.separator + "temp.txt";
-        String out = "temp" + File.separator + "out.png";
+        String path = "temp" + File.separator + nameRandom + ".txt";
+        String out = "temp" + File.separator + nameRandom + ".png";
 
         File outFile = new File(out);
         File inFile = new File(path);
@@ -129,9 +131,8 @@ public class GraphVizCreator extends InstructionHandleWorker {
             e1.printStackTrace();
         }
 
-        outFile = new File(out); // TODO: Может и бред?
         int counter = 0;
-        while (!outFile.exists() && counter != 20) {
+        while (!outFile.exists() && counter != 2000) {
             try {
                 System.out.println("i waiting");
                 Thread.sleep(100);
@@ -141,10 +142,19 @@ public class GraphVizCreator extends InstructionHandleWorker {
             }
         }
 
-        if (!outFile.exists()) {
-            System.out.println(":(");
-        }
         return outFile;
+    }
+
+    private String getRandomName() {
+        String alpha = "0123456789abcdef";
+        StringBuilder sb = new StringBuilder();
+        Random r = new Random();
+        for (int i = 0; i < 15; i++) {
+            int num = r.nextInt(15);
+            sb.append(alpha.charAt(num));
+        }
+
+        return sb.toString();
     }
 
     @Override

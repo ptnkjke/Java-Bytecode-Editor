@@ -1,8 +1,5 @@
 package net.ptnkjke.gui.main;
 
-
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
-import com.sun.xml.internal.ws.util.ByteArrayBuffer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -12,24 +9,17 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import net.ptnkjke.gui.main.model.classtree.*;
-import net.ptnkjke.gui.main.model.classtree.Attribute;
-import net.ptnkjke.gui.main.model.classtree.Constant;
-import net.ptnkjke.gui.main.model.classtree.ConstantPool;
-import net.ptnkjke.gui.main.model.classtree.Method;
 import net.ptnkjke.gui.main.panes.methodpane.Utils;
-import net.ptnkjke.utils.JarClassLoader;
-import org.apache.bcel.classfile.*;
-
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.ClassGen;
 
-import javax.swing.tree.TreeNode;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -48,6 +38,8 @@ public class Controller {
     private ClassGen classGen;
 
     private boolean classFile = false;
+
+    private File source;
 
     @FXML
     private void initialize() {
@@ -96,14 +88,14 @@ public class Controller {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters(); // TODO: Добавить фильтр для расширений
 
-        File file = fileChooser.showOpenDialog(null);
+        source = fileChooser.showOpenDialog(null);
         // Если файл не пустой, то производим открытие
-        if (file == null) {
+        if (source == null) {
             return;
         }
 
         // Заполняем дерево
-        openFile(file);
+        openFile(source);
     }
 
     private void openFile(File file) {
@@ -132,6 +124,7 @@ public class Controller {
             return;
 
         }
+
         try {
             ZipEntry next = jarInputStream.getNextEntry();
             while (next != null) {
@@ -232,11 +225,18 @@ public class Controller {
         }
     }
 
-    private void saveClassFileTest(JavaClass javaClass) {
+    public void saveChange() {
+        ZipFile zipFile = null;
+
+
         try {
-            javaClass.dump(new File("temp" + File.separator + "dumped.class"));
-        } catch (IOException e) {
+            zipFile = new ZipFile(source);
+        } catch (ZipException e) {
             e.printStackTrace();
+            return;
         }
+
+        // Удаляем все изменённые файлы
+
     }
 }
