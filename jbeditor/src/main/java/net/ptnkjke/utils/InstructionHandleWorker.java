@@ -229,6 +229,7 @@ public abstract class InstructionHandleWorker {
                     break;
                 case Constants.IF_ICMPGE:
                     visitIF_ICMPGE(instructionHandle);
+                    break;
                 case Constants.IF_ICMPLE:
                     visitIF_ICMPLE(instructionHandle);
                     break;
@@ -359,20 +360,42 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof MULTIANEWARRAY) {
             visitMULTIANEWARRAY(instructionHandle);
         } else if (handle instanceof NameSignatureInstruction) {
-            if (handle instanceof FieldOrMethod) {
-                if (handle instanceof FieldInstruction) {
-                    visitFieldInstruction(instructionHandle);
-                } else if (handle instanceof InvokeInstruction) {
-                    visitInvokeInstruction(instructionHandle);
-                } else {
+
+            switch (handle.getOpcode()) {
+                case Constants.GETFIELD:
+                    visitGETFIELD(instructionHandle);
+                    break;
+                case Constants.GETSTATIC:
+                    visitGETSTATIC(instructionHandle);
+                    break;
+                case Constants.INVOKEINTERFACE:
+                    visitINVOKEINTERFACE(instructionHandle);
+                    break;
+                case Constants.INVOKESPECIAL:
+                    visitINVOKESPECIAL(instructionHandle);
+                    break;
+                case Constants.INVOKESTATIC:
+                    visitINVOKESTATIC(instructionHandle);
+                    break;
+                case Constants.INVOKEVIRTUAL:
+                    visitINVOKEVIRTUAL(instructionHandle);
+                    break;
+                case Constants.PUTFIELD:
+                    visitPUTFIELD(instructionHandle);
+                    break;
+                case Constants.PUTSTATIC:
+                    visitPUTSTATIC(instructionHandle);
+                    break;
+                case Constants.INVOKEDYNAMIC:
+                    visitINVOKEDYNAMIC(instructionHandle);
+                    break;
+                default:
                     try {
                         throw new Exception("");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-            } else if (handle instanceof INVOKEDYNAMIC) {
-                visitINVOKEDYNAMIC(instructionHandle);
+                    break;
             }
         } else if (handle instanceof NEW) {
             visitNEW(instructionHandle);
@@ -740,9 +763,21 @@ public abstract class InstructionHandleWorker {
 
     public abstract void visitMULTIANEWARRAY(InstructionHandle instructionHandle);
 
-    public abstract void visitFieldInstruction(InstructionHandle instructionHandle);
+    public abstract void visitGETFIELD(InstructionHandle handle);
 
-    public abstract void visitInvokeInstruction(InstructionHandle instructionHandle);
+    public abstract void visitGETSTATIC(InstructionHandle handle);
+
+    public abstract void visitINVOKEINTERFACE(InstructionHandle handle);
+
+    public abstract void visitINVOKESPECIAL(InstructionHandle handle);
+
+    public abstract void visitINVOKESTATIC(InstructionHandle handle);
+
+    public abstract void visitINVOKEVIRTUAL(InstructionHandle handle);
+
+    public abstract void visitPUTFIELD(InstructionHandle handle);
+
+    public abstract void visitPUTSTATIC(InstructionHandle handle);
 
     public abstract void visitINVOKEDYNAMIC(InstructionHandle instructionHandle);
 

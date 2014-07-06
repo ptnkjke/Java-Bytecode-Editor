@@ -8,8 +8,9 @@ import java.util.ArrayList;
  * Created by Lopatin on 06.07.2014.
  */
 public class JByteParser {
-    InstructionList instructions = new InstructionList();
-    ArrayList<InstructionHandle> instructionHandleList = new ArrayList<InstructionHandle>();
+    private InstructionList instructions = new InstructionList();
+    private ArrayList<InstructionHandle> instructionHandleList = new ArrayList<InstructionHandle>();
+    private ArrayList<BranchStruct> branchStructs = new ArrayList<>();
 
     public void parse(String code, ConstantPoolGen ccg) {
         InstructionList list;
@@ -18,16 +19,25 @@ public class JByteParser {
 
 
         for (int i = 0; i < lines.length; i++) {
-            parseLine(lines[i]);
+            parseLine(lines, i);
         }
+
+        // Обработка BranchStructs!
     }
 
 
-    private void parseLine(String code) {
+    /**
+     * Сколько строк обработано
+     *
+     * @return
+     */
+    private int parseLine(String[] lines, int numLine) {
+        String instructionName = null;
+        String[] args = null;
         InstructionHandle instructionHandle = null;
         Instruction instruction = null;
         // ARITHMETIC
-        switch (code) {
+        switch (instructionName) {
             case "dadd":
                 instruction = new DADD();
                 break;
@@ -140,11 +150,11 @@ public class JByteParser {
         if (instruction != null) {
             instructionHandle = instructions.append(instruction);
             instructionHandleList.add(instructionHandle);
-            return;
+            return 1;
         }
 
         // ARRAYINSTRUCTION
-        switch (code) {
+        switch (instructionName) {
             case "aaload":
                 instruction = new AALOAD();
                 break;
@@ -198,10 +208,89 @@ public class JByteParser {
         if (instruction != null) {
             instructionHandle = instructions.append(instruction);
             instructionHandleList.add(instructionHandle);
-            return;
+            return 1;
         }
 
         // BRANCHINSTRUCTION
+        switch (instructionName) {
+            case "goto":
+                instruction = new GOTO(null);
+                break;
+            case "goto_w":
+                instruction = new GOTO_W(null);
+                break;
+            case "if_acmpeq":
+                instruction = new IF_ACMPEQ(null);
+                break;
+            case "if_acmne":
+                instruction = new IF_ACMPNE(null);
+                break;
+            case "if_icmpeq":
+                instruction = new IF_ICMPEQ(null);
+                break;
+            case "if_icmpge":
+                instruction = new IF_ICMPGE(null);
+                break;
+            case "if_icmpgt":
+                instruction = new IF_ICMPGT(null);
+                break;
+            case "if_icmple":
+                instruction = new IF_ICMPLE(null);
+                break;
+            case "if_icmplt":
+                instruction = new IF_ICMPLT(null);
+                break;
+            case "if_icmpne":
+                instruction = new IF_ICMPNE(null);
+                break;
+            case "ifeq":
+                instruction = new IFEQ(null);
+                break;
+            case "ifge":
+                instruction = new IFGE(null);
+                break;
+            case "ifgt":
+                instruction = new IFGT(null);
+                break;
+            case "ifle":
+                instruction = new IFLE(null);
+                break;
+            case "iflt":
+                instruction = new IFLT(null);
+                break;
+            case "ifne":
+                instruction = new IFNE(null);
+                break;
+            case "ifnonnull":
+                instruction = new IFNONNULL(null);
+                break;
+            case "ifnull":
+                instruction = new IFNULL(null);
+                break;
+            case "jsr":
+                instruction = new JSR(null);
+                break;
+            case "jsr_w":
+                instruction = new JSR_W(null);
+                break;
+        }
+        if (instruction != null) {
+            instructionHandle = instructions.append(instruction);
+            instructionHandleList.add(instructionHandle);
+
+            branchStructs.add(new BranchStruct((BranchInstruction) instruction, Integer.parseInt(args[0])));
+            return 1;
+        }
+
+        switch (instructionName) {
+            case "tableswitch":
+                //instruction = new TABLESWITCH(); // TODO: !!!!ALERT!!!!!
+                break;
+            case "lookupswitch":
+                //instruction = new LOOKUPSWITCH() // TODO: !!!!ALERT!!!!!
+                break;
+        }
+
 
         // CONVERSIONINTRUCTION
 
@@ -214,5 +303,16 @@ public class JByteParser {
         // STACKINSTRUCTION
 
         // OTHERINSTRUCTION
+
+        return 0;
+    }
+
+    private class BranchStruct {
+        BranchInstruction instruction;
+        int label;
+
+        BranchStruct(BranchInstruction instruction, int label) {
+
+        }
     }
 }

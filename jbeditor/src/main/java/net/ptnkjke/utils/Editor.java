@@ -1,6 +1,7 @@
 package net.ptnkjke.utils;
 
 import org.apache.bcel.Constants;
+import org.apache.bcel.generic.Instruction;
 import org.apache.bcel.generic.InstructionHandle;
 
 /**
@@ -11,6 +12,10 @@ public class Editor extends InstructionHandleWorker {
 
     private void base(InstructionHandle handle) {
         result = Constants.OPCODE_NAMES[handle.getInstruction().getOpcode()] + "      // " + handle.toString();
+    }
+
+    private void select(InstructionHandle handle) {
+
     }
 
     public String getResult() {
@@ -497,13 +502,43 @@ public class Editor extends InstructionHandleWorker {
     }
 
     @Override
-    public void visitFieldInstruction(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitGETFIELD(InstructionHandle handle) {
+        base(handle);
     }
 
     @Override
-    public void visitInvokeInstruction(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitGETSTATIC(InstructionHandle handle) {
+        base(handle);
+    }
+
+    @Override
+    public void visitINVOKEINTERFACE(InstructionHandle handle) {
+        base(handle);
+    }
+
+    @Override
+    public void visitINVOKESPECIAL(InstructionHandle handle) {
+        base(handle);
+    }
+
+    @Override
+    public void visitINVOKESTATIC(InstructionHandle handle) {
+        base(handle);
+    }
+
+    @Override
+    public void visitINVOKEVIRTUAL(InstructionHandle handle) {
+        base(handle);
+    }
+
+    @Override
+    public void visitPUTFIELD(InstructionHandle handle) {
+        base(handle);
+    }
+
+    @Override
+    public void visitPUTSTATIC(InstructionHandle handle) {
+        base(handle);
     }
 
     @Override

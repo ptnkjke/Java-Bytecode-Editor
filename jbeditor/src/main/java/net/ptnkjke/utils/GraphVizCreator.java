@@ -1,6 +1,8 @@
 package net.ptnkjke.utils;
 
 import net.ptnkjke.Configutation;
+import org.apache.bcel.classfile.Constant;
+import org.apache.bcel.classfile.ConstantUtf8;
 import org.apache.bcel.generic.*;
 
 import java.io.BufferedWriter;
@@ -18,9 +20,11 @@ public class GraphVizCreator extends InstructionHandleWorker {
     private int lastCounter = 0;
     StringBuilder sb = new StringBuilder();
     InstructionList list;
+    ConstantPoolGen cpg;
 
-    public GraphVizCreator(InstructionList list) {
+    public GraphVizCreator(InstructionList list, ConstantPoolGen cpg) {
         this.list = list;
+        this.cpg = cpg;
     }
 
     private void visitBase(InstructionHandle instructionHandle) {
@@ -28,7 +32,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
 
         sb.append(String.format("%d[label=\"%s\"];\n", instructionHandle.getPosition(), instructionHandle.toString()));
         if (nextHandle != null) {
-            sb.append(String.format("%d -> %d;\n", instructionHandle.getPosition(), nextHandle.getPosition()));
+            sb.append(String.format("%d -> %d[label=\"next\"];\n", instructionHandle.getPosition(), nextHandle.getPosition()));
         } else {
             System.out.println("next == null");
         }
@@ -43,15 +47,36 @@ public class GraphVizCreator extends InstructionHandleWorker {
         sb.append(String.format("%d[label=\"%s\"];\n", instructionHandle.getPosition(), instructionHandle.toString()));
 
         if (nextHandle != null) {
-            sb.append(String.format("%d -> %d;\n", instructionHandle.getPosition(), nextHandle.getPosition()));
-        } else {
-            System.out.println("next == null");
+            sb.append(String.format("%d -> %d[label=\"next\"];\n", instructionHandle.getPosition(), nextHandle.getPosition()));
         }
 
         if (target != null) {
             sb.append(String.format("%d -> %d;\n", instructionHandle.getPosition(), target.getPosition()));
-        } else {
-            System.out.println("next == null");
+        }
+    }
+
+    private void visitSelect(InstructionHandle instructionHandle) {
+        InstructionHandle nextHandle = instructionHandle.getNext();
+
+        Select select = (Select) instructionHandle.getInstruction();
+
+        InstructionHandle[] targets = select.getTargets();
+
+        sb.append(String.format("%d[label=\"%s\"];\n", instructionHandle.getPosition(), instructionHandle.toString()));
+
+        if (nextHandle != null) {
+            sb.append(String.format("%d -> %d[label=\"next\"];\n", instructionHandle.getPosition(), nextHandle.getPosition()));
+        }
+
+        InstructionHandle target = select.getTarget();
+        if (target != null) {
+            sb.append(String.format("%d -> %d [label=\"default\"];\n", instructionHandle.getPosition(), target.getPosition()));
+        }
+
+        int i = 0;
+        for (InstructionHandle h : targets) {
+            sb.append(String.format("%d -> %d [label=\"match%d\"];\n", instructionHandle.getPosition(), h.getPosition(), i));
+            i++;
         }
     }
 
@@ -110,7 +135,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
             }
         }
 
-        if(!outFile.exists()){
+        if (!outFile.exists()) {
             System.out.println(":(");
         }
         return outFile;
@@ -490,12 +515,12 @@ public class GraphVizCreator extends InstructionHandleWorker {
 
     @Override
     public void visitLOOKUPSWITCH(InstructionHandle instructionHandle) {
-        visitBranchInstruction(instructionHandle);
+        visitSelect(instructionHandle);
     }
 
     @Override
     public void visitTABLESWITCH(InstructionHandle instructionHandle) {
-        visitBranchInstruction(instructionHandle);
+        visitSelect(instructionHandle);
     }
 
     @Override
@@ -604,13 +629,57 @@ public class GraphVizCreator extends InstructionHandleWorker {
     }
 
     @Override
-    public void visitFieldInstruction(InstructionHandle instructionHandle) {
-        visitBase(instructionHandle);
+    public void visitGETFIELD(InstructionHandle handle) {
+        visitBase(handle);
     }
 
     @Override
-    public void visitInvokeInstruction(InstructionHandle instructionHandle) {
-        visitBase(instructionHandle);
+    public void visitGETSTATIC(InstructionHandle handle) {
+        CPInstruction cpInstruction = (CPInstruction) handle.getInstruction();
+        Constant constant = cpg.getConstant(cpInstruction.getIndex());
+
+        InstructionHandle nextHandle = handle.getNext();
+
+
+        String text = handle.toString() + constant.toString();
+        sb.append(String.format("%d[label=\"%s\"];\n", handle.getPosition(), text));
+        if (nextHandle != null) {
+            sb.append(String.format("%d -> %d[label=\"next\"];\n", handle.getPosition(), nextHandle.getPosition()));
+        } else {
+            System.out.println("next == null");
+        }
+
+
+    }
+
+    @Override
+    public void visitINVOKEINTERFACE(InstructionHandle handle) {
+        visitBase(handle);
+    }
+
+    @Override
+    public void visitINVOKESPECIAL(InstructionHandle handle) {
+        visitBase(handle);
+    }
+
+    @Override
+    public void visitINVOKESTATIC(InstructionHandle handle) {
+        visitBase(handle);
+    }
+
+    @Override
+    public void visitINVOKEVIRTUAL(InstructionHandle handle) {
+        visitBase(handle);
+    }
+
+    @Override
+    public void visitPUTFIELD(InstructionHandle handle) {
+        visitBase(handle);
+    }
+
+    @Override
+    public void visitPUTSTATIC(InstructionHandle handle) {
+        visitBase(handle);
     }
 
     @Override

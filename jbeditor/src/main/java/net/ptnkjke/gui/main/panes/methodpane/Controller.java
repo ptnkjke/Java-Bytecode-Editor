@@ -63,7 +63,7 @@ public class Controller {
 
         textArea.setText(sb.toString());
 
-        graphVizCreator = new GraphVizCreator(methodGen.getInstructionList());
+        graphVizCreator = new GraphVizCreator(methodGen.getInstructionList(), classGen.getConstantPool());
         File image = graphVizCreator.getImage();
         Image img = null;
 
