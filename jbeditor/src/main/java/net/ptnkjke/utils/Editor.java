@@ -1,8 +1,8 @@
 package net.ptnkjke.utils;
 
+import net.ptnkjke.gui.main.model.classtree.Constant;
 import org.apache.bcel.Constants;
-import org.apache.bcel.generic.Instruction;
-import org.apache.bcel.generic.InstructionHandle;
+import org.apache.bcel.generic.*;
 
 /**
  * Created by Lopatin on 06.07.2014.
@@ -11,11 +11,15 @@ public class Editor extends InstructionHandleWorker {
     private String result;
 
     private void base(InstructionHandle handle) {
-        result = Constants.OPCODE_NAMES[handle.getInstruction().getOpcode()] + "      // " + handle.toString();
+        result = Constants.OPCODE_NAMES[handle.getInstruction().getOpcode()] + "      // [" + handle.getPosition() + "]";
     }
 
-    private void select(InstructionHandle handle) {
-
+    private void branch(InstructionHandle handle) {
+        BranchInstruction branchInstruction = (BranchInstruction) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[handle.getInstruction().getOpcode()]
+                + " "
+                + branchInstruction.getTarget().getPosition()
+                + "      // [" + handle.getPosition() + "]";
     }
 
     public String getResult() {
@@ -206,6 +210,7 @@ public class Editor extends InstructionHandleWorker {
         base(instructionHandle);
     }
 
+    //
     @Override
     public void visitAALOAD(InstructionHandle instructionHandle) {
         base(instructionHandle);
@@ -286,115 +291,158 @@ public class Editor extends InstructionHandleWorker {
         base(instructionHandle);
     }
 
+    //
+
     @Override
     public void visitGOTO(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitGOTO_W(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIF_ACMPEQ(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIF_ACMPNE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIF_ICMPEQ(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIF_ICMPGT(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIF_ICMPGE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIF_ICMPLE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIF_ICMPLT(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIF_ICMPNE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIFEQ(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIFGE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIFGT(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIFLE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIFLT(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIFNE(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIFNONNULL(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitIFNULL(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitJSR(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitJSR_W(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        branch(instructionHandle);
     }
 
     @Override
     public void visitLOOKUPSWITCH(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        Instruction instruction = instructionHandle.getInstruction();
+
+        StringBuilder temp = new StringBuilder();
+        temp.append(Constants.OPCODE_NAMES[instruction.getOpcode()]);
+
+        LOOKUPSWITCH lookupswitch = (LOOKUPSWITCH) instruction;
+        InstructionHandle[] targets = lookupswitch.getTargets();
+        int[] mathes = lookupswitch.getMatchs();
+        InstructionHandle defaultTarget = lookupswitch.getTarget();
+
+        temp.append(targets.length).append("\n");
+        int i = 0;
+        for (InstructionHandle handle : targets) {
+            temp.append("    ").append(mathes[i]).append(": ").append(handle.getPosition()).append("\n");
+            i++;
+        }
+        InstructionHandle target = lookupswitch.getTarget();
+        temp.append("    ").append("default").append(": ").append(target.getPosition());
+        result = temp.toString();
     }
 
     @Override
     public void visitTABLESWITCH(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        Instruction instruction = instructionHandle.getInstruction();
+
+        StringBuilder temp = new StringBuilder();
+        temp.append(Constants.OPCODE_NAMES[instruction.getOpcode()]);
+
+
+        TABLESWITCH tableswitch = (TABLESWITCH) instruction;
+        InstructionHandle[] targets = tableswitch.getTargets();
+        int[] mathes = tableswitch.getMatchs();
+        InstructionHandle defaultTarget = tableswitch.getTarget();
+
+        temp.append(targets.length).append("\n");
+        int i = 0;
+        for (InstructionHandle handle : targets) {
+            temp.append("    ").append(mathes[i]).append(": ").append(handle.getPosition()).append("\n");
+            i++;
+        }
+
+        InstructionHandle target = tableswitch.getTarget();
+        temp.append("    ").append("default").append(": ").append(target.getPosition());
+        result = temp.toString();
     }
+
+    //
+
 
     @Override
     public void visitD2F(InstructionHandle instructionHandle) {
@@ -471,85 +519,106 @@ public class Editor extends InstructionHandleWorker {
         base(instructionHandle);
     }
 
+
+    //
+
+
     @Override
-    public void visitANEWARRAY(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitANEWARRAY(InstructionHandle handle) {
+        ANEWARRAY instruction = (ANEWARRAY) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
-    public void visitCHECKCAST(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitCHECKCAST(InstructionHandle handle) {
+        CHECKCAST instruction = (CHECKCAST) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
-    public void visitINSTANCEOF(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitINSTANCEOF(InstructionHandle handle) {
+        INSTANCEOF instruction = (INSTANCEOF) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
-    public void visitLDC(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitLDC(InstructionHandle handle) {
+        LDC instruction = (LDC) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
-    public void visitLDC2_W(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitLDC2_W(InstructionHandle handle) {
+        LDC2_W instruction = (LDC2_W) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
-    public void visitMULTIANEWARRAY(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitMULTIANEWARRAY(InstructionHandle handle) {
+        MULTIANEWARRAY instruction = (MULTIANEWARRAY) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + instruction.getDimensions() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitGETFIELD(InstructionHandle handle) {
-        base(handle);
+        GETFIELD instruction = (GETFIELD) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitGETSTATIC(InstructionHandle handle) {
-        base(handle);
+        GETSTATIC instruction = (GETSTATIC) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINVOKEINTERFACE(InstructionHandle handle) {
-        base(handle);
+        INVOKEINTERFACE instruction = (INVOKEINTERFACE) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + " " + instruction.getCount() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINVOKESPECIAL(InstructionHandle handle) {
-        base(handle);
+        INVOKESPECIAL instruction = (INVOKESPECIAL) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINVOKESTATIC(InstructionHandle handle) {
-        base(handle);
+        INVOKESTATIC instruction = (INVOKESTATIC) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINVOKEVIRTUAL(InstructionHandle handle) {
-        base(handle);
+        INVOKEVIRTUAL instruction = (INVOKEVIRTUAL) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitPUTFIELD(InstructionHandle handle) {
-        base(handle);
+        PUTFIELD instruction = (PUTFIELD) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitPUTSTATIC(InstructionHandle handle) {
-        base(handle);
+        PUTSTATIC instruction = (PUTSTATIC) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
-    public void visitINVOKEDYNAMIC(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitINVOKEDYNAMIC(InstructionHandle handle) {
+        INVOKEDYNAMIC instruction = (INVOKEDYNAMIC) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
-    public void visitNEW(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+    public void visitNEW(InstructionHandle handle) {
+        NEW instruction = (NEW) handle.getInstruction();
+        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
+
 
     @Override
     public void visitALOAD(InstructionHandle instructionHandle) {
@@ -763,7 +832,8 @@ public class Editor extends InstructionHandleWorker {
 
     @Override
     public void visitNEWARRAY(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        NEWARRAY newarray = (NEWARRAY) instructionHandle.getInstruction();
+        result = Constants.OPCODE_NAMES[newarray.getOpcode()] + " " + newarray.getTypecode() + "      // [" + instructionHandle.getPosition() + "]";
     }
 
     @Override
@@ -773,16 +843,19 @@ public class Editor extends InstructionHandleWorker {
 
     @Override
     public void visitRET(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        RET ret = (RET) instructionHandle.getInstruction();
+        result = Constants.OPCODE_NAMES[ret.getOpcode()] + " " + ret.getIndex() + "      // [" + instructionHandle.getPosition() + "]";
     }
 
     @Override
     public void visitSIPUSH(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        SIPUSH sipush = (SIPUSH) instructionHandle.getInstruction();
+        result = Constants.OPCODE_NAMES[sipush.getOpcode()] + " " + sipush.getValue() + "      // [" + instructionHandle.getPosition() + "]";
     }
 
     @Override
     public void visitBIPUSH(InstructionHandle instructionHandle) {
-        base(instructionHandle);
+        BIPUSH bipush = (BIPUSH) instructionHandle.getInstruction();
+        result = Constants.OPCODE_NAMES[bipush.getOpcode()] + " " + bipush.getValue() + "      // [" + instructionHandle.getPosition() + "]";
     }
 }

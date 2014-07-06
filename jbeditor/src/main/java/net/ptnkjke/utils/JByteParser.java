@@ -1,5 +1,6 @@
 package net.ptnkjke.utils;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import org.apache.bcel.generic.*;
 
 import java.util.ArrayList;
@@ -11,6 +12,11 @@ public class JByteParser {
     private InstructionList instructions = new InstructionList();
     private ArrayList<InstructionHandle> instructionHandleList = new ArrayList<InstructionHandle>();
     private ArrayList<BranchStruct> branchStructs = new ArrayList<>();
+    private ArrayList<SelectStruct> selectStructs = new ArrayList<>();
+
+    public InstructionList getInstructions() {
+        return instructions;
+    }
 
     public void parse(String code, ConstantPoolGen ccg) {
         InstructionList list;
@@ -18,11 +24,31 @@ public class JByteParser {
         String[] lines = code.split("\n");
 
 
-        for (int i = 0; i < lines.length; i++) {
-            parseLine(lines, i);
+        int readAll = 0;
+        int curLine = 0;
+
+        while (readAll != curLine) {
+            readAll += parseLine(lines, curLine);
         }
 
         // Обработка BranchStructs!
+        for (BranchStruct branchStruct : branchStructs) {
+            InstructionHandle instructionHandle = instructionHandleList.get(branchStruct.label);
+            branchStruct.instruction.setTarget(instructionHandle);
+        }
+
+        // Обработка TABLESELECT + LOOCKUPSELECT
+        for (SelectStruct selectStruct : selectStructs) {
+            InstructionHandle target = instructionHandleList.get(selectStruct.target);
+            Select select = selectStruct.instruction;
+            select.setTarget(target);
+
+            for (Integer i : selectStruct.instructs) {
+                InstructionHandle handle = instructionHandleList.get(i);
+                select.getTargets()[i] = handle;
+            }
+        }
+
     }
 
 
@@ -284,25 +310,542 @@ public class JByteParser {
 
         switch (instructionName) {
             case "tableswitch":
-                //instruction = new TABLESWITCH(); // TODO: !!!!ALERT!!!!!
-                break;
+                int size = Integer.parseInt(args[0]);
+                int[] match = new int[size];
+                InstructionHandle[] targets = new InstructionHandle[size];
+                InstructionHandle defaultTarget = null;
+                instruction = new TABLESWITCH(match, targets, defaultTarget);
+
+                instructionHandle = instructions.append(instruction);
+                instructionHandleList.add(instructionHandle);
+
+                int counter = 0;
+                int[] instructions_arr = new int[size];
+
+                for (int c = numLine + 1; c < numLine + 1 + size; c++) {
+                    String tLine = lines[c];
+                    String[] subs = tLine.split(":");
+
+                    match[counter] = Integer.parseInt(subs[0]);
+                    instructions_arr[counter] = Integer.parseInt(subs[1]);
+                    counter++;
+                }
+                String def_string = lines[numLine + 1 + size + 1];
+                String[] def_subs = def_string.split(":");
+                int target = Integer.parseInt(def_subs[1]);
+
+                selectStructs.add(new SelectStruct((TABLESWITCH) instruction, instructions_arr, target));
+                return 1 + size + 1;
             case "lookupswitch":
-                //instruction = new LOOKUPSWITCH() // TODO: !!!!ALERT!!!!!
-                break;
+                size = Integer.parseInt(args[0]);
+                match = new int[size];
+                targets = new InstructionHandle[size];
+                defaultTarget = null;
+                instruction = new LOOKUPSWITCH(match, targets, defaultTarget);
+
+                instructionHandle = instructions.append(instruction);
+                instructionHandleList.add(instructionHandle);
+
+                counter = 0;
+                instructions_arr = new int[size];
+                for (int c = numLine + 1; c < numLine + 1 + size; c++) {
+                    String tLine = lines[c];
+                    String[] subs = tLine.split(":");
+
+                    match[counter] = Integer.parseInt(subs[0]);
+                    instructions_arr[counter] = Integer.parseInt(subs[1]);
+                    counter++;
+                }
+
+                def_string = lines[numLine + 1 + size + 1];
+                def_subs = def_string.split(":");
+                target = Integer.parseInt(def_subs[1]);
+
+                selectStructs.add(new SelectStruct((LOOKUPSWITCH) instruction, instructions_arr, target));
+                return 1 + size + 1;
         }
 
 
         // CONVERSIONINTRUCTION
+        switch (instructionName) {
+            case "d2i":
+                instruction = new D2I();
+                break;
+            case "f2i":
+                instruction = new F2I();
+                break;
+            case "l2i":
+                instruction = new L2I();
+                break;
+            case "d2f":
+                instruction = new D2F();
+                break;
+            case "i2f":
+                instruction = new I2F();
+                break;
+            case "l2f":
+                instruction = new L2F();
+                break;
+            case "d2l":
+                instruction = new D2L();
+                break;
+            case "f2l":
+                instruction = new F2L();
+                break;
+            case "i2l":
+                instruction = new I2L();
+                break;
+            case "f2d":
+                instruction = new F2D();
+                break;
+            case "i2d":
+                instruction = new I2D();
+                break;
+            case "l2d":
+                instruction = new L2D();
+                break;
+            case "i2b":
+                instruction = new I2B();
+                break;
+            case "i2c":
+                instruction = new I2C();
+                break;
+            case "i2s":
+                instruction = new I2S();
+                break;
+        }
+
+        if (instruction != null) {
+            instructionHandle = instructions.append(instruction);
+            instructionHandleList.add(instructionHandle);
+            return 1;
+        }
 
         // CPINSTRUCTION
+        int n;
+        switch (instructionName) {
+            case "anewarray":
+                n = Integer.parseInt(args[0]);
+                instruction = new ANEWARRAY(n);
+                break;
+            case "checkcast":
+                n = Integer.parseInt(args[0]);
+                instruction = new CHECKCAST(n);
+                break;
+            case "instanceof":
+                n = Integer.parseInt(args[0]);
+                instruction = new INSTANCEOF(n);
+                break;
+            case "ldc":
+                n = Integer.parseInt(args[0]);
+                instruction = new LDC(n);
+                break;
+            case "ldc2_w":
+                n = Integer.parseInt(args[0]);
+                instruction = new LDC2_W(n);
+                n = Integer.parseInt(args[0]);
+                break;
+            case "multianewarray":
+                n = Integer.parseInt(args[0]);
+                Short sh = Short.parseShort(args[1]);
+                instruction = new MULTIANEWARRAY(n, sh);
+                break;
+            case "getfield":
+                n = Integer.parseInt(args[0]);
+                instruction = new GETFIELD(n);
+                break;
+            case "getstatic":
+                n = Integer.parseInt(args[0]);
+                instruction = new GETSTATIC(n);
+                break;
+            case "invokeinterface":
+                n = Integer.parseInt(args[0]);
+                int nargs = Integer.parseInt(args[1]);
+                instruction = new INVOKEINTERFACE(n, nargs);
+                break;
+            case "invokestatic":
+                n = Integer.parseInt(args[0]);
+                instruction = new INVOKESTATIC(n);
+                break;
+            case "invokevirtual":
+                n = Integer.parseInt(args[0]);
+                instruction = new INVOKEVIRTUAL(n);
+                break;
+            case "putfield":
+                n = Integer.parseInt(args[0]);
+                instruction = new PUTFIELD(n);
+                break;
+            case "invokedynamic":
+                n = Integer.parseInt(args[0]);
+                int index = Integer.parseInt(args[1]);
+                instruction = new INVOKEDYNAMIC((short) n, index);
+                break;
+            case "new":
+                n = Integer.parseInt(args[0]);
+                instruction = new NEW(n);
+                break;
+        }
+
+        if (instruction != null) {
+            instructionHandle = instructions.append(instruction);
+            instructionHandleList.add(instructionHandle);
+            return 1;
+        }
 
         // LOCALVARIABLEINSTRUCTION
 
+        int num;
+        switch (instructionName) {
+            case "aload":
+                num = Integer.parseInt(args[0]);
+                instruction = new ALOAD(num);
+                break;
+            case "aload_0":
+                instruction = new ALOAD(0);
+                break;
+            case "aload_1":
+                instruction = new ALOAD(1);
+                break;
+            case "aload_2":
+                instruction = new ALOAD(2);
+                break;
+            case "aload_3":
+                instruction = new ALOAD(3);
+                break;
+            case "dload":
+                num = Integer.parseInt(args[0]);
+                instruction = new DLOAD(num);
+                break;
+            case "dload_0":
+                instruction = new DLOAD(0);
+                break;
+            case "dload_1":
+                instruction = new DLOAD(1);
+                break;
+            case "dload_2":
+                instruction = new DLOAD(2);
+                break;
+            case "dload_3":
+                instruction = new DLOAD(3);
+                break;
+            case "fload":
+                num = Integer.parseInt(args[0]);
+                instruction = new FLOAD(num);
+                break;
+            case "fload_0":
+                instruction = new FLOAD(0);
+                break;
+            case "fload_1":
+                instruction = new FLOAD(1);
+                break;
+            case "fload_2":
+                instruction = new FLOAD(2);
+                break;
+            case "fload_3":
+                instruction = new FLOAD(3);
+                break;
+            case "iload":
+                num = Integer.parseInt(args[0]);
+                instruction = new ILOAD(num);
+                break;
+            case "iload_0":
+                instruction = new ILOAD(0);
+                break;
+            case "iload_1":
+                instruction = new ILOAD(1);
+                break;
+            case "iload_2":
+                instruction = new ILOAD(2);
+                break;
+            case "iload_3":
+                instruction = new ILOAD(3);
+                break;
+            case "lload":
+                num = Integer.parseInt(args[0]);
+                instruction = new LLOAD(num);
+                break;
+            case "lload_0":
+                instruction = new LLOAD(0);
+                break;
+            case "lload_1":
+                instruction = new LLOAD(1);
+                break;
+            case "lload_2":
+                instruction = new LLOAD(2);
+                break;
+            case "lload_3":
+                instruction = new LLOAD(3);
+                break;
+            case "astore":
+                num = Integer.parseInt(args[0]);
+                instruction = new ASTORE(num);
+                break;
+            case "astore_0":
+                instruction = new ASTORE(0);
+                break;
+            case "astore_1":
+                instruction = new ASTORE(1);
+                break;
+            case "astore_2":
+                instruction = new ASTORE(2);
+                break;
+            case "astore_3":
+                instruction = new ASTORE(3);
+                break;
+            case "dstore":
+                num = Integer.parseInt(args[0]);
+                instruction = new ASTORE(num);
+                break;
+            case "dstore_0":
+                instruction = new DSTORE(0);
+                break;
+            case "dstore_1":
+                instruction = new DSTORE(1);
+                break;
+            case "dstore_2":
+                instruction = new DSTORE(2);
+                break;
+            case "dstore_3":
+                instruction = new DSTORE(3);
+                break;
+            case "fstore":
+                num = Integer.parseInt(args[0]);
+                instruction = new FSTORE(num);
+                break;
+            case "fstore_0":
+                instruction = new FSTORE(0);
+                break;
+            case "fstore_1":
+                instruction = new FSTORE(1);
+                break;
+            case "fstore_2":
+                instruction = new FSTORE(2);
+                break;
+            case "fstore_3":
+                instruction = new FSTORE(3);
+                break;
+            case "istore":
+                num = Integer.parseInt(args[0]);
+                instruction = new ISTORE(num);
+                break;
+            case "istore_0":
+                instruction = new ISTORE(0);
+                break;
+            case "istore_1":
+                instruction = new ISTORE(1);
+                break;
+            case "istore_2":
+                instruction = new ISTORE(2);
+                break;
+            case "istore_3":
+                instruction = new ISTORE(3);
+                break;
+            case "lstore":
+                num = Integer.parseInt(args[0]);
+                instruction = new LSTORE(num);
+                break;
+            case "lstore_0":
+                instruction = new LSTORE(0);
+                break;
+            case "lstore_1":
+                instruction = new LSTORE(1);
+                break;
+            case "lstore_2":
+                instruction = new LSTORE(2);
+                break;
+            case "lstore_3":
+                instruction = new LSTORE(3);
+                break;
+            case "iinc":
+                num = Integer.parseInt(args[0]);
+                int num2 = Integer.parseInt(args[1]);
+                instruction = new IINC(num, num2);
+                break;
+        }
+
+        if (instruction != null) {
+            instructionHandle = instructions.append(instruction);
+            instructionHandleList.add(instructionHandle);
+            return 1;
+        }
+
         // RETURNINSTRUCTION
+
+        switch (instructionName) {
+            case "areturn":
+                instruction = new ARETURN();
+                break;
+            case "dreturn":
+                instruction = new DRETURN();
+                break;
+            case "freturn":
+                instruction = new FRETURN();
+                break;
+            case "ireturn":
+                instruction = new IRETURN();
+                break;
+            case "lreturn":
+                instruction = new LRETURN();
+                break;
+            case "return":
+                instruction = new ARETURN();
+                break;
+
+        }
+        if (instruction != null) {
+            instructionHandle = instructions.append(instruction);
+            instructionHandleList.add(instructionHandle);
+            return 1;
+        }
 
         // STACKINSTRUCTION
 
+        switch (instructionName) {
+            case "dup":
+                instruction = new DUP();
+                break;
+            case "dup2":
+                instruction = new DUP2();
+                break;
+            case "dup_x1":
+                instruction = new DUP_X1();
+                break;
+            case "dup_x2":
+                instruction = new DUP_X2();
+                break;
+            case "dup2_x1":
+                instruction = new DUP2_X1();
+                break;
+            case "dup2_x2":
+                instruction = new DUP2_X2();
+                break;
+            case "pop":
+                instruction = new POP();
+                break;
+            case "pop2":
+                instruction = new POP2();
+                break;
+            case "swap":
+                instruction = new SWAP();
+                break;
+        }
+        if (instruction != null) {
+            instructionHandle = instructions.append(instruction);
+            instructionHandleList.add(instructionHandle);
+            return 1;
+        }
+
         // OTHERINSTRUCTION
+        switch (instructionName) {
+            case "aconst_null":
+                instruction = new ACONST_NULL();
+                break;
+            case "arraylength":
+                instruction = new ARRAYLENGTH();
+                break;
+            case "athrow":
+                instruction = new ATHROW();
+                break;
+            case "breakpoint":
+                instruction = new BREAKPOINT();
+                break;
+            case "dcmpg":
+                instruction = new DCMPG();
+                break;
+            case "dconst_0":
+                instruction = new DCONST(0);
+                break;
+            case "dconst_1":
+                instruction = new DCONST(1);
+                break;
+            case "fcmpg":
+                instruction = new FCMPG();
+                break;
+            case "fcmpl":
+                instruction = new FCMPL();
+                break;
+            case "fconst_0":
+                instruction = new FCONST(0);
+                break;
+            case "fconst_1":
+                instruction = new FCONST(1);
+                break;
+            case "fconst_2":
+                instruction = new FCONST(2);
+                break;
+            case "iconst_m1":
+                instruction = new ICONST(-1);
+                break;
+            case "iconst_0":
+                instruction = new ICONST(0);
+                break;
+            case "iconst_1":
+                instruction = new ICONST(1);
+                break;
+            case "iconst_2":
+                instruction = new ICONST(2);
+                break;
+            case "iconst_3":
+                instruction = new ICONST(3);
+                break;
+            case "iconst_4":
+                instruction = new ICONST(4);
+                break;
+            case "iconst_5":
+                instruction = new ICONST(5);
+                break;
+            case "impdep1":
+                instruction = new IMPDEP1();
+                break;
+            case "impdep2":
+                instruction = new IMPDEP2();
+                break;
+            case "lcmp":
+                instruction = new LCMP();
+                break;
+            case "lconst_0":
+                instruction = new LCONST(0);
+            case "lconst_1":
+                instruction = new LCONST(1);
+                break;
+            case "monitorenter":
+                instruction = new MONITORENTER();
+                break;
+            case "monitorexit":
+                instruction = new MONITOREXIT();
+                break;
+            case "newarray":
+                Byte b = Byte.parseByte(args[0]);
+                instruction = new NEWARRAY(b);
+                break;
+            case "nop":
+                instruction = new NOP();
+                break;
+            case "ret":
+                Integer integer = Integer.parseInt(args[0]);
+                instruction = new RET(integer);
+                break;
+            case "sipush":
+                Short sh = Short.parseShort(args[0]);
+                instruction = new SIPUSH(sh);
+                break;
+            case "bipush":
+                Byte byt = Byte.parseByte(args[0]);
+                instruction = new BIPUSH(byt);
+                break;
+        }
+
+        if (instruction != null) {
+            instructionHandle = instructions.append(instruction);
+            instructionHandleList.add(instructionHandle);
+            return 1;
+        }
+
+        try {
+            throw new Exception("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return 0;
     }
@@ -312,7 +855,20 @@ public class JByteParser {
         int label;
 
         BranchStruct(BranchInstruction instruction, int label) {
+            this.instruction = instruction;
+            this.label = label;
+        }
+    }
 
+    private class SelectStruct {
+        Select instruction;
+        int[] instructs;
+        int target;
+
+        SelectStruct(Select instruction, int[] instructs, int target) {
+            this.instruction = instruction;
+            this.instructs = instructs;
+            this.target = target;
         }
     }
 }

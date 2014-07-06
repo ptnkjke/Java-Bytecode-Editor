@@ -115,7 +115,12 @@ public class GraphVizCreator extends InstructionHandleWorker {
             e.printStackTrace();
         }
 
-        outFile.deleteOnExit();
+        if (outFile.exists()) {
+            System.out.println("exists");
+            if (outFile.delete()) {
+                System.out.println("deleted");
+            }
+        }
         String command = String.format("%s -Tpng -o%s %s", Configutation.graphVizPath, outFile.getAbsolutePath(), inFile.getAbsolutePath());
 
         try {
@@ -124,6 +129,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
             e1.printStackTrace();
         }
 
+        outFile = new File(out); // TODO: Может и бред?
         int counter = 0;
         while (!outFile.exists() && counter != 20) {
             try {

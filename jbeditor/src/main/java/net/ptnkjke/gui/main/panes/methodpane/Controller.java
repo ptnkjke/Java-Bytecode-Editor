@@ -23,6 +23,7 @@ import javax.script.ScriptException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 /**
@@ -69,12 +70,16 @@ public class Controller {
 
         try {
             do {
+                FileInputStream fileInputStream = new FileInputStream(image);
                 img = new Image(new FileInputStream(image));
+                fileInputStream.close();
             } while (img.getWidth() == 0); // TODO: Очень странное место
             imageView.setImage(img);
             imageView.setFitWidth(img.getWidth());
             imageView.setFitHeight(img.getHeight());
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

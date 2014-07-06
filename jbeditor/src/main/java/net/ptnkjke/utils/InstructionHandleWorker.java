@@ -67,7 +67,7 @@ public abstract class InstructionHandleWorker {
             visitRET(handle);
         } else if (instruction instanceof SIPUSH) {                   // SIPUSH
             visitSIPUSH(handle);
-        } else if (instruction instanceof BIPUSH) {
+        } else if (instruction instanceof BIPUSH) {                   // PIBUSH
             visitBIPUSH(handle);
         } else {
             try {
@@ -718,6 +718,7 @@ public abstract class InstructionHandleWorker {
     public abstract void visitLOOKUPSWITCH(InstructionHandle instructionHandle);
 
     public abstract void visitTABLESWITCH(InstructionHandle instructionHandle);
+
     // CONVERSION
 
     public abstract void visitD2F(InstructionHandle instructionHandle);
