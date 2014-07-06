@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -22,7 +23,11 @@
           </Tab>
           <Tab text="Graph">
                <content>
-                  <ScrollPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" />
+                  <ScrollPane fx:id="imagePane" prefViewportHeight="150.0" prefViewportWidth="200.0">
+                     <content>
+                        <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                     </content>
+                  </ScrollPane>
                </content>
           </Tab>
             <Tab text="Console">

@@ -1,28 +1,28 @@
 package net.ptnkjke.gui.main.panes.methodpane;
 
-import com.sun.javafx.geom.BaseBounds;
-import com.sun.javafx.geom.transform.BaseTransform;
-import com.sun.javafx.jmx.MXNodeAlgorithm;
-import com.sun.javafx.jmx.MXNodeAlgorithmContext;
+
 import javafx.fxml.FXML;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextFlow;
 import net.ptnkjke.gui.main.model.classtree.Method;
 import net.ptnkjke.utils.Editor;
 import net.ptnkjke.utils.GraphVizCreator;
 import org.apache.bcel.generic.ClassGen;
 import org.apache.bcel.generic.InstructionHandle;
-import org.apache.bcel.generic.InstructionList;
 import org.apache.bcel.generic.MethodGen;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 
 /**
@@ -32,7 +32,9 @@ public class Controller {
     @FXML
     private TextArea textArea;
     @FXML
-    private Canvas canvas;
+    private ImageView imageView;
+    @FXML
+    private ScrollPane scrollPane;
     @FXML
     private TextArea console;
 
@@ -51,7 +53,7 @@ public class Controller {
 
         if (handle != null) {
             do {
-                Editor editor =new Editor();
+                Editor editor = new Editor();
                 editor.visit(handle);
 
                 sb.append(editor.getResult()).append("\n");
@@ -61,18 +63,24 @@ public class Controller {
 
         textArea.setText(sb.toString());
 
-        drawInCanvas(methodGen.getInstructionList());
         graphVizCreator = new GraphVizCreator(methodGen.getInstructionList());
-    }
+        File image = graphVizCreator.getImage();
+        Image img = null;
+
+        try {
+            do {
+                img = new Image(new FileInputStream(image));
+            } while (img.getWidth() == 0); // TODO: Очень странное место
+            imageView.setImage(img);
+            imageView.setFitWidth(img.getWidth());
+            imageView.setFitHeight(img.getHeight());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        TextFlow tf;
 
 
-    private void drawInCanvas(InstructionList instructionList) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        gc.setFill(Color.RED);
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(2);
-        gc.fillRect(100, 100, 100, 100);
     }
 
     public void runConsole() {
@@ -97,14 +105,6 @@ public class Controller {
 
     public void setTextArea(TextArea textArea) {
         this.textArea = textArea;
-    }
-
-    public Canvas getCanvas() {
-        return canvas;
-    }
-
-    public void setCanvas(Canvas canvas) {
-        this.canvas = canvas;
     }
 
     public TextArea getConsole() {

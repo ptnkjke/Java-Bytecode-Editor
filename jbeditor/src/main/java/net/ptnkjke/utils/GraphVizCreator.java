@@ -1,7 +1,12 @@
 package net.ptnkjke.utils;
 
+import net.ptnkjke.Configutation;
 import org.apache.bcel.generic.*;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +63,57 @@ public class GraphVizCreator extends InstructionHandleWorker {
         lastCounter = 0;
         sb = new StringBuilder();
         visit(list.getStart());
+    }
+
+
+    public File getImage() {
+        visitAll();
+
+        File workDir = new File("temp");
+        if (!workDir.exists()) {
+            workDir.mkdirs();
+        }
+        File temp = new File(workDir, "temp.txt");
+
+        String path = "temp" + File.separator + "temp.txt";
+        String out = "temp" + File.separator + "out.png";
+
+        File outFile = new File(out);
+        File inFile = new File(path);
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(temp));
+
+            writer.write(sb.toString());
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        outFile.deleteOnExit();
+        String command = String.format("%s -Tpng -o%s %s", Configutation.graphVizPath, outFile.getAbsolutePath(), inFile.getAbsolutePath());
+
+        try {
+            Runtime.getRuntime().exec(command);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
+        int counter = 0;
+        while (!outFile.exists() && counter != 20) {
+            try {
+                System.out.println("i waiting");
+                Thread.sleep(100);
+                counter++;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(!outFile.exists()){
+            System.out.println(":(");
+        }
+        return outFile;
     }
 
     @Override

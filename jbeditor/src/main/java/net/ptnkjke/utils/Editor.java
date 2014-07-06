@@ -10,7 +10,7 @@ public class Editor extends InstructionHandleWorker {
     private String result;
 
     private void base(InstructionHandle handle) {
-        result = Constants.OPCODE_NAMES[handle.getInstruction().getOpcode()] + " // " + handle.toString();
+        result = Constants.OPCODE_NAMES[handle.getInstruction().getOpcode()] + "      // " + handle.toString();
     }
 
     public String getResult() {
