@@ -1,6 +1,5 @@
 package net.ptnkjke.gui.main;
 
-import com.sun.xml.internal.ws.util.ByteArrayBuffer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -12,11 +11,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.FileHeader;
-import net.lingala.zip4j.model.UnzipParameters;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
-import net.lingala.zip4j.util.Zip4jUtil;
 import net.ptnkjke.Configutation;
 import net.ptnkjke.gui.main.model.classtree.*;
 import net.ptnkjke.gui.main.panes.methodpane.Utils;
@@ -24,11 +18,10 @@ import net.ptnkjke.service.DataActivity;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.ClassGen;
-import org.apache.bcel.util.ByteSequence;
-import sun.security.action.GetLongAction;
 
-import java.io.*;
-import java.nio.ByteBuffer;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
