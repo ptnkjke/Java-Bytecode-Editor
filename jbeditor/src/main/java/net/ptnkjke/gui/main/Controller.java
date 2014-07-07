@@ -2,13 +2,16 @@ package net.ptnkjke.gui.main;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
+import javafx.stage.*;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.ptnkjke.Configutation;
@@ -22,6 +25,7 @@ import org.apache.bcel.generic.ClassGen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ResourceBundle;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -261,5 +265,33 @@ public class Controller {
         }
 
         DataActivity.changes.clear();
+    }
+
+    public void openPreferences() {
+        Parent root = null;
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            //fxmlLoader.setResources(ResourceBundle.getBundle("translation"));
+
+            root = fxmlLoader.load(this.getClass().getResource("/net/ptnkjke/gui/preferences/View.fxml").openStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage dialog = new Stage();
+        dialog.initStyle(StageStyle.UTILITY);
+        dialog.setResizable(false);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setScene(new Scene(root));
+        dialog.setTitle("preferences");
+
+        // Событие на закрытие окна
+        dialog.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                Configutation.save();
+            }
+        });
+
+        dialog.show();
     }
 }

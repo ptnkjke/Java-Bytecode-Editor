@@ -6,53 +6,48 @@
 <?import javafx.scene.layout.*?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.ptnkjke.gui.main.Controller">
-<children><MenuBar>
-  <menus>
-    <Menu mnemonicParsing="false" text="File">
-      <items>
-        <MenuItem mnemonicParsing="false" text="Close" />
-      </items>
-    </Menu>
-    <Menu mnemonicParsing="false" text="Edit">
-      <items>
-        <MenuItem mnemonicParsing="false" text="Delete" />
-      </items>
-    </Menu>
-    <Menu mnemonicParsing="false" text="Help">
-      <items>
-        <MenuItem mnemonicParsing="false" text="About" />
-      </items>
-    </Menu>
-  </menus>
-</MenuBar><ToolBar prefWidth="200.0">
-  <items>
-    <Button mnemonicParsing="false" onAction="#onButtonLoadClass" text="Open" />
+    <children><MenuBar>
+        <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openPreferences" text="Preferences" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                </items>
+            </Menu>
+        </menus>
+    </MenuBar><ToolBar prefWidth="200.0">
+        <items>
+            <Button mnemonicParsing="false" onAction="#onButtonLoadClass" text="Open" />
             <Button mnemonicParsing="false" onAction="#saveChange" text="Save Changes" />
-  </items>
-</ToolBar><HBox prefHeight="347.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
-         <children>
+        </items>
+    </ToolBar><HBox prefHeight="347.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+        <children>
             <SplitPane dividerPositions="0.5" prefHeight="340.0" prefWidth="600.0" HBox.hgrow="SOMETIMES">
-              <items>
-                  <GridPane fx:id="firstPane">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <TreeView fx:id="mainTree" prefHeight="200.0" prefWidth="200.0" />
-                     </children>
-                  </GridPane>
-                  <GridPane fx:id="secondPane">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                  </GridPane>
-              </items>
+                <items>
+                    <GridPane fx:id="firstPane">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <children>
+                            <TreeView fx:id="mainTree" prefHeight="200.0" prefWidth="200.0" />
+                        </children>
+                    </GridPane>
+                    <GridPane fx:id="secondPane">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                    </GridPane>
+                </items>
             </SplitPane>
-         </children></HBox>
-</children></VBox>
+        </children></HBox>
+    </children></VBox>
