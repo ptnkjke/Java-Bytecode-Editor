@@ -95,15 +95,15 @@ public class GraphVizCreator extends InstructionHandleWorker {
     public File getImage() {
         visitAll();
 
-        File workDir = new File("temp");
+        File workDir = new File(Configutation.workDir);
         if (!workDir.exists()) {
             workDir.mkdirs();
         }
-        String nameRandom = getRandomName();
+        String nameRandom = Utils.getRandomName();
         File temp = new File(workDir, nameRandom + ".txt");
 
-        String path = "temp" + File.separator + nameRandom + ".txt";
-        String out = "temp" + File.separator + nameRandom + ".png";
+        String path = Configutation.workDir + File.separator + nameRandom + ".txt";
+        String out = Configutation.workDir + File.separator + nameRandom + ".png";
 
         File outFile = new File(out);
         File inFile = new File(path);
@@ -122,6 +122,9 @@ public class GraphVizCreator extends InstructionHandleWorker {
             if (outFile.delete()) {
                 System.out.println("deleted");
             }
+        }
+        if (!new File(Configutation.graphVizPath).exists()) {
+            return null;
         }
         String command = String.format("%s -Tpng -o%s %s", Configutation.graphVizPath, outFile.getAbsolutePath(), inFile.getAbsolutePath());
 
@@ -143,18 +146,6 @@ public class GraphVizCreator extends InstructionHandleWorker {
         }
 
         return outFile;
-    }
-
-    private String getRandomName() {
-        String alpha = "0123456789abcdef";
-        StringBuilder sb = new StringBuilder();
-        Random r = new Random();
-        for (int i = 0; i < 15; i++) {
-            int num = r.nextInt(15);
-            sb.append(alpha.charAt(num));
-        }
-
-        return sb.toString();
     }
 
     @Override

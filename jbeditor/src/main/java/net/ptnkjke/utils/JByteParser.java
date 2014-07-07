@@ -482,6 +482,10 @@ public class JByteParser {
                 n = Integer.parseInt(args[0]);
                 instruction = new GETSTATIC(n);
                 break;
+            case "putstatic":
+                n = Integer.parseInt(args[0]);
+                instruction = new PUTSTATIC(n);
+                break;
             case "invokeinterface":
                 n = Integer.parseInt(args[0]);
                 int nargs = Integer.parseInt(args[1]);

@@ -5,4 +5,5 @@ package net.ptnkjke;
  */
 public class Configutation {
     public static String graphVizPath = "C:\\soft\\graphviz\\bin\\dot.exe";
+    public static String workDir = "C:\\temp";
 }

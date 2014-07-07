@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.text.TextFlow;
 import net.ptnkjke.gui.main.model.classtree.Method;
+import net.ptnkjke.service.DataActivity;
 import net.ptnkjke.utils.Editor;
 import net.ptnkjke.utils.GraphVizCreator;
 import net.ptnkjke.utils.JByteParser;
@@ -59,8 +59,10 @@ public class Controller {
         File image = graphVizCreator.getImage();
         Image img = null;
 
+        if (image == null) {
+            return;
+        }
         try {
-
             FileInputStream fileInputStream = new FileInputStream(image);
             img = new Image(new FileInputStream(image));
             fileInputStream.close();
@@ -73,10 +75,6 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        TextFlow tf;
-
-
     }
 
     public void testSave() {
@@ -92,6 +90,10 @@ public class Controller {
         MethodGen mg = new MethodGen(old, classGen.getClassName(), classGen.getConstantPool());
         mg.setInstructionList(instructionList);
         classGen.setMethodAt(mg.getMethod(), num);
+
+        DataActivity.changes.add(classGen);
+
+
 /*
 
         File oldText = new File("temp" + File.separator + "old.text");

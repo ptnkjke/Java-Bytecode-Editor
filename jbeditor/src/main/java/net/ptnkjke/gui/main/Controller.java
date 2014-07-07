@@ -1,5 +1,6 @@
 package net.ptnkjke.gui.main;
 
+import com.sun.xml.internal.ws.util.ByteArrayBuffer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -11,15 +12,23 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.FileHeader;
+import net.lingala.zip4j.model.UnzipParameters;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
+import net.lingala.zip4j.util.Zip4jUtil;
+import net.ptnkjke.Configutation;
 import net.ptnkjke.gui.main.model.classtree.*;
 import net.ptnkjke.gui.main.panes.methodpane.Utils;
+import net.ptnkjke.service.DataActivity;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.ClassGen;
+import org.apache.bcel.util.ByteSequence;
+import sun.security.action.GetLongAction;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -118,11 +127,14 @@ public class Controller {
         JarInputStream jarInputStream = null;
 
         try {
+            ZipFile zipFile = new ZipFile("C:\\Users\\dalopatin\\Downloads\\launcher.jar");
             jarInputStream = new JarInputStream(new FileInputStream(file));
         } catch (IOException e) {
             e.printStackTrace();
             return;
 
+        } catch (ZipException e) {
+            e.printStackTrace();
         }
 
         try {
@@ -143,6 +155,12 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
             return;
+        }
+
+        try {
+            jarInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -228,7 +246,6 @@ public class Controller {
     public void saveChange() {
         ZipFile zipFile = null;
 
-
         try {
             zipFile = new ZipFile(source);
         } catch (ZipException e) {
@@ -236,7 +253,20 @@ public class Controller {
             return;
         }
 
-        // Удаляем все изменённые файлы
+        // Сохраняем изменения в папке
+        String extractedDir = Configutation.workDir + File.separator + net.ptnkjke.utils.Utils.getRandomName();
+        for (ClassGen cg : DataActivity.changes) {
+            String path = cg.getClassName().replace(".", "/") + ".class";
+            File f = new File(extractedDir, path);
+            f.getParentFile().mkdirs();
 
+            try {
+                cg.getJavaClass().dump(f);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        DataActivity.changes.clear();
     }
 }
