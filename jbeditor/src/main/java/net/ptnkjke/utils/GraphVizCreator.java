@@ -103,7 +103,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
         File temp = new File(workDir, nameRandom + ".txt");
 
         String path = Configutation.workDir + File.separator + nameRandom + ".txt";
-        String out = Configutation.workDir + File.separator + nameRandom + ".png";
+        String out = Configutation.workDir + File.separator + nameRandom + ".jpg";
 
         File outFile = new File(out);
         File inFile = new File(path);
@@ -126,7 +126,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
         if (!new File(Configutation.graphVizPath).exists()) {
             return null;
         }
-        String command = String.format("%s -Tpng -o%s %s", Configutation.graphVizPath, outFile.getAbsolutePath(), inFile.getAbsolutePath());
+        String command = String.format("%s -Tjpg -o%s %s", Configutation.graphVizPath, outFile.getAbsolutePath(), inFile.getAbsolutePath());
 
         try {
             Runtime.getRuntime().exec(command);
@@ -135,7 +135,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
         }
 
         int counter = 0;
-        while (!outFile.exists() && counter != 2000) {
+        while (!outFile.canWrite() && !outFile.exists() && counter != 2000) {
             try {
                 System.out.println("i waiting");
                 Thread.sleep(100);

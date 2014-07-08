@@ -68,7 +68,10 @@ public class Controller {
         }
         try {
             FileInputStream fileInputStream = new FileInputStream(image);
-            img = new Image(new FileInputStream(image));
+            do {
+                img = new Image(new FileInputStream(image));
+            } while (img.getWidth() == 0);
+            
             fileInputStream.close();
 
             imageView.setImage(img);
