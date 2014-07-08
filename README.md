@@ -7,3 +7,6 @@ With this tool you can modify bytecode and cosntruct a graph of bytecode instruc
 
 
 This requires java8.
+
+mini demonstration:
+![thumbs up](demo.gif)
