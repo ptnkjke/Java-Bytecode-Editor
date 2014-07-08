@@ -46,7 +46,11 @@ public class Controller {
         if (handle != null) {
             do {
                 Editor editor = new Editor();
-                editor.visit(handle);
+                try {
+                    editor.visit(handle);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 sb.append(editor.getResult()).append("\n");
                 handle = handle.getNext();

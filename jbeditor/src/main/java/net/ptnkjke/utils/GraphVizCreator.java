@@ -153,7 +153,11 @@ public class GraphVizCreator extends InstructionHandleWorker {
         sb.append("digraph g{");
 
         do {
-            super.visit(handle);
+            try {
+                super.visit(handle);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             handle = handle.getNext();
         }
         while (handle != null);

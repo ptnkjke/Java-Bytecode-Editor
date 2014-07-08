@@ -8,7 +8,7 @@ import org.apache.bcel.generic.*;
  */
 public abstract class InstructionHandleWorker {
 
-    public void visit(InstructionHandle handle) {
+    public void visit(InstructionHandle handle) throws Exception {
         Instruction instruction = handle.getInstruction();
 
         if (instruction instanceof ArithmeticInstruction) {           // Arithmetic Instruction
@@ -70,15 +70,11 @@ public abstract class InstructionHandleWorker {
         } else if (instruction instanceof BIPUSH) {                   // PIBUSH
             visitBIPUSH(handle);
         } else {
-            try {
-                throw new Exception(" " + instruction.getOpcode());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception(" " + instruction.getOpcode());
         }
     }
 
-    private void visitArithmeticInstruction(InstructionHandle instructionHandle) {
+    private void visitArithmeticInstruction(InstructionHandle instructionHandle) throws Exception {
         Instruction handle = instructionHandle.getInstruction();
         if (handle instanceof DADD) {
             visitDADD(instructionHandle);
@@ -153,15 +149,11 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof LXOR) {  //
             visitLXOR(instructionHandle);
         } else {
-            try {
-                throw new Exception("");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("");
         }
     }
 
-    private void visitArrayInstruction(InstructionHandle instructionHandle) {
+    private void visitArrayInstruction(InstructionHandle instructionHandle) throws Exception {
 
         Instruction handle = instructionHandle.getInstruction();
         if (handle instanceof AALOAD) {            // AALOAD
@@ -197,15 +189,11 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof SASTORE) {    // SASTORE
             visitSASTORE(instructionHandle);
         } else {
-            try {
-                throw new Exception("");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("");
         }
     }
 
-    private void visitBranchInstruction(InstructionHandle instructionHandle) {
+    private void visitBranchInstruction(InstructionHandle instructionHandle) throws Exception {
         Instruction handle = instructionHandle.getInstruction();
         if (handle instanceof GotoInstruction) {
             if (handle instanceof GOTO) {
@@ -277,17 +265,11 @@ public abstract class InstructionHandleWorker {
                 visitTABLESWITCH(instructionHandle);
             }
         } else {
-
-
-            try {
-                throw new Exception("");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("");
         }
     }
 
-    private void visitConversionInstruction(InstructionHandle instructionHandle) {
+    private void visitConversionInstruction(InstructionHandle instructionHandle) throws Exception {
         Instruction handle = instructionHandle.getInstruction();
         switch (handle.getOpcode()) {
             case Constants.D2F:
@@ -336,16 +318,11 @@ public abstract class InstructionHandleWorker {
                 visitL2I(instructionHandle);
                 break;
             default:
-                try {
-                    throw new Exception("");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
+                throw new Exception("");
         }
     }
 
-    private void visitCPInstruction(InstructionHandle instructionHandle) {
+    private void visitCPInstruction(InstructionHandle instructionHandle) throws Exception {
         Instruction handle = instructionHandle.getInstruction();
         if (handle instanceof ANEWARRAY) {
             visitANEWARRAY(instructionHandle);
@@ -390,25 +367,16 @@ public abstract class InstructionHandleWorker {
                     visitINVOKEDYNAMIC(instructionHandle);
                     break;
                 default:
-                    try {
-                        throw new Exception("");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
+                    throw new Exception("");
             }
         } else if (handle instanceof NEW) {
             visitNEW(instructionHandle);
         } else {
-            try {
-                throw new Exception("");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("");
         }
     }
 
-    private void visitLocalVariableInstruction(InstructionHandle instructionHandle) {
+    private void visitLocalVariableInstruction(InstructionHandle instructionHandle) throws Exception {
         Instruction handle = instructionHandle.getInstruction();
         if (handle instanceof LoadInstruction) {
             switch (handle.getOpcode()) {
@@ -448,12 +416,7 @@ public abstract class InstructionHandleWorker {
                     visitLLOAD(instructionHandle);
                     break;
                 default:
-                    try {
-                        throw new Exception("");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
+                    throw new Exception("");
             }
         } else if (handle instanceof StoreInstruction) {
             switch (handle.getOpcode()) {
@@ -493,25 +456,16 @@ public abstract class InstructionHandleWorker {
                     visitLSTORE(instructionHandle);
                     break;
                 default:
-                    try {
-                        throw new Exception("");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
+                    throw new Exception("");
             }
         } else if (handle instanceof IINC) {
             visitIINC(instructionHandle);
         } else {
-            try {
-                throw new Exception("");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("");
         }
     }
 
-    private void visitReturnInstruction(InstructionHandle instructionHandle) {
+    private void visitReturnInstruction(InstructionHandle instructionHandle) throws Exception {
         Instruction handle = instructionHandle.getInstruction();
 
         if (handle instanceof ARETURN) {
@@ -527,15 +481,11 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof RETURN) {
             visitRETURN(instructionHandle);
         } else {
-            try {
-                throw new Exception("");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("");
         }
     }
 
-    private void visitStackInstruction(InstructionHandle instructionHandle) {
+    private void visitStackInstruction(InstructionHandle instructionHandle) throws Exception {
 
         Instruction handle = instructionHandle.getInstruction();
         if (handle instanceof DUP) {
@@ -557,11 +507,7 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof SWAP) {
             visitSWAP(instructionHandle);
         } else {
-            try {
-                throw new Exception("");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("");
         }
     }
     // ARITHMETICINSTRUCTION

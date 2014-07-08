@@ -8,13 +8,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.*;
+import javafx.util.Callback;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.ptnkjke.Configutation;
+import net.ptnkjke.gui.main.model.ConsoleMessage;
+import net.ptnkjke.gui.main.model.MessageType;
 import net.ptnkjke.gui.main.model.classtree.*;
 import net.ptnkjke.gui.main.panes.methodpane.Utils;
 import net.ptnkjke.service.DataActivity;
@@ -25,7 +30,6 @@ import org.apache.bcel.generic.ClassGen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ResourceBundle;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -40,6 +44,8 @@ public class Controller {
     private GridPane secondPane;
     @FXML
     private TreeView<Info> mainTree;
+    @FXML
+    private ListView<ConsoleMessage> consoleid;
 
     private ClassGen classGen;
 
@@ -49,7 +55,6 @@ public class Controller {
 
     @FXML
     private void initialize() {
-
         // Загружаем по умолчанию mainPain
         GridPane root = null;
         FXMLLoader fxmlLoader = null;
@@ -86,6 +91,14 @@ public class Controller {
                 }
             }
         });
+
+        // Свой виджет
+        consoleid.setCellFactory(new Callback<ListView<ConsoleMessage>, ListCell<ConsoleMessage>>() {
+            @Override
+            public ListCell<ConsoleMessage> call(ListView<ConsoleMessage> param) {
+                return new FlowListCell();
+            }
+        });
     }
 
     public void onButtonLoadClass() {
@@ -105,6 +118,7 @@ public class Controller {
     }
 
     private void openFile(File file) {
+
         TreeItem<Info> rootNode = Info.createInfo(file.getName(), Root.class);
         mainTree.setRoot(rootNode);
 
@@ -114,6 +128,7 @@ public class Controller {
             classFile = true;
             openClassFile(file);
         }
+
     }
 
     private void openJarFile(File file) {
@@ -145,6 +160,7 @@ public class Controller {
                         byteArrayBuffer.write(data);
                     }*/
                     JavaClass javaClass = new ClassParser(file.getAbsolutePath(), next.getName()).parse();
+
                     addClassToTree(javaClass, false);
                 }
                 next = jarInputStream.getNextEntry();
@@ -161,7 +177,8 @@ public class Controller {
         }
     }
 
-    private void openClassFile(File file) {
+    private void openClassFile(final File file) {
+
         JavaClass javaClass;
         try {
             javaClass = new ClassParser(file.getAbsolutePath()).parse();
@@ -170,6 +187,7 @@ public class Controller {
             return;
         }
         addClassToTree(javaClass, false);
+
 
     }
 
@@ -211,7 +229,8 @@ public class Controller {
                 node.getChildren().add(inner);
             }
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            ConsoleMessage consoleMessage = new ConsoleMessage(e.getMessage(), MessageType.WARNING);
+            consoleid.getItems().add(consoleMessage);
         }
 
         // METHODS
