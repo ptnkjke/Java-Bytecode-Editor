@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
@@ -28,11 +29,7 @@
           </Tab>
           <Tab text="Graph">
                <content>
-                  <ScrollPane fx:id="imagePane" prefViewportHeight="150.0" prefViewportWidth="200.0">
-                     <content>
-                        <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                     </content>
-                  </ScrollPane>
+                  <WebView fx:id="webview" prefHeight="174.0" prefWidth="271.0" />
                </content>
           </Tab>
         </tabs>

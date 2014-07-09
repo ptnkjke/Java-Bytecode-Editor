@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.web.WebView;
 import net.ptnkjke.gui.main.model.classtree.Method;
 import net.ptnkjke.service.DataActivity;
 import net.ptnkjke.utils.Editor;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 
 /**
@@ -24,7 +26,7 @@ public class Controller {
     @FXML
     private TextArea textArea;
     @FXML
-    private ImageView imageView;
+    private WebView webview;
 
     private GraphVizCreator graphVizCreator;
 
@@ -61,25 +63,10 @@ public class Controller {
 
         graphVizCreator = new GraphVizCreator(methodGen.getInstructionList(), classGen.getConstantPool());
         File image = graphVizCreator.getImage();
-        Image img = null;
 
-        if (image == null) {
-            return;
-        }
         try {
-            FileInputStream fileInputStream = new FileInputStream(image);
-            do {
-                img = new Image(new FileInputStream(image));
-            } while (img.getWidth() == 0);
-            
-            fileInputStream.close();
-
-            imageView.setImage(img);
-            imageView.setFitWidth(img.getWidth());
-            imageView.setFitHeight(img.getHeight());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            webview.getEngine().load(image.toURI().toURL().toString());
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }

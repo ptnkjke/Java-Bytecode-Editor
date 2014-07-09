@@ -33,7 +33,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
 
         sb.append(String.format("%d[label=\"%s\"];\n", instructionHandle.getPosition(), instructionHandle.toString()));
         if (nextHandle != null) {
-            sb.append(String.format("%d -> %d[label=\"next\"];\n", instructionHandle.getPosition(), nextHandle.getPosition()));
+            sb.append(String.format("%d -> %d[label=\"next\", color=\"#839096\"];\n", instructionHandle.getPosition(), nextHandle.getPosition()));
         } else {
             System.out.println("next == null");
         }
@@ -45,14 +45,13 @@ public class GraphVizCreator extends InstructionHandleWorker {
         BranchInstruction branchInstruction = (BranchInstruction) instruction;
         InstructionHandle target = branchInstruction.getTarget();
 
-        sb.append(String.format("%d[label=\"%s\"];\n", instructionHandle.getPosition(), instructionHandle.toString()));
-
+        sb.append(String.format("%d[shape=diamond,label=\"%s\"];\n", instructionHandle.getPosition(), instructionHandle.toString()));
         if (nextHandle != null) {
-            sb.append(String.format("%d -> %d[label=\"next\"];\n", instructionHandle.getPosition(), nextHandle.getPosition()));
+            sb.append(String.format("%d -> %d[label=\"next\", color=\"#839096\"];\n", instructionHandle.getPosition(), nextHandle.getPosition()));
         }
 
         if (target != null) {
-            sb.append(String.format("%d -> %d;\n", instructionHandle.getPosition(), target.getPosition()));
+            sb.append(String.format("%d -> %d[label=\"target\"];\n", instructionHandle.getPosition(), target.getPosition()));
         }
     }
 
@@ -66,7 +65,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
         sb.append(String.format("%d[label=\"%s\"];\n", instructionHandle.getPosition(), instructionHandle.toString()));
 
         if (nextHandle != null) {
-            sb.append(String.format("%d -> %d[label=\"next\"];\n", instructionHandle.getPosition(), nextHandle.getPosition()));
+            sb.append(String.format("%d -> %d[label=\"next\", color=\"#839096\"];\n", instructionHandle.getPosition(), nextHandle.getPosition()));
         }
 
         InstructionHandle target = select.getTarget();
@@ -103,7 +102,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
         File temp = new File(workDir, nameRandom + ".txt");
 
         String path = Configutation.workDir + File.separator + nameRandom + ".txt";
-        String out = Configutation.workDir + File.separator + nameRandom + ".jpg";
+        String out = Configutation.workDir + File.separator + nameRandom + ".svg";
 
         File outFile = new File(out);
         File inFile = new File(path);
@@ -126,7 +125,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
         if (!new File(Configutation.graphVizPath).exists()) {
             return null;
         }
-        String command = String.format("%s -Tjpg -o%s %s", Configutation.graphVizPath, outFile.getAbsolutePath(), inFile.getAbsolutePath());
+        String command = String.format("%s -Tsvg -o%s %s", Configutation.graphVizPath, outFile.getAbsolutePath(), inFile.getAbsolutePath());
 
         try {
             Runtime.getRuntime().exec(command);
@@ -151,7 +150,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
     @Override
     public void visit(InstructionHandle handle) {
         sb.append("digraph g{");
-
+        sb.append("node [fontsize=8, shape = box];\nedge [fontsize=8]");
         do {
             try {
                 super.visit(handle);
