@@ -25,16 +25,13 @@ public class FlowListCell extends ListCell<ConsoleMessage> {
 
             if (item.getType() == MessageType.CRITICAL) {
                 text.setFill(Color.RED);
+            } else if (item.getType() == MessageType.WARNING) {
+                text.setFill(Color.DARKBLUE);
             }
 
             Hyperlink hyperlink = new Hyperlink("description");
 
-            hyperlink.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    System.out.println("asd");
-                }
-            });
+            hyperlink.setOnMousePressed(event -> System.out.println("asd"));
 
 
             textFlow.getChildren().addAll(text);

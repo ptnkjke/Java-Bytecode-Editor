@@ -1,5 +1,6 @@
 package net.ptnkjke.utils;
 
+import net.MissingInstruction;
 import org.apache.bcel.Constants;
 import org.apache.bcel.generic.*;
 
@@ -70,7 +71,7 @@ public abstract class InstructionHandleWorker {
         } else if (instruction instanceof BIPUSH) {                   // PIBUSH
             visitBIPUSH(handle);
         } else {
-            throw new Exception(" " + instruction.getOpcode());
+            throw new MissingInstruction("i dont know #opcode " + instruction.getOpcode());
         }
     }
 
@@ -149,7 +150,7 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof LXOR) {  //
             visitLXOR(instructionHandle);
         } else {
-            throw new Exception("");
+            throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
 
@@ -189,7 +190,7 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof SASTORE) {    // SASTORE
             visitSASTORE(instructionHandle);
         } else {
-            throw new Exception("");
+            throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
 
@@ -251,6 +252,8 @@ public abstract class InstructionHandleWorker {
                 case Constants.IFNULL:
                     visitIFNULL(instructionHandle);
                     break;
+                default:
+                    throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
             }
         } else if (handle instanceof JsrInstruction) {
             if (handle instanceof JSR) {
@@ -265,7 +268,7 @@ public abstract class InstructionHandleWorker {
                 visitTABLESWITCH(instructionHandle);
             }
         } else {
-            throw new Exception("");
+            throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
 
@@ -318,7 +321,7 @@ public abstract class InstructionHandleWorker {
                 visitL2I(instructionHandle);
                 break;
             default:
-                throw new Exception("");
+                throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
 
@@ -367,12 +370,12 @@ public abstract class InstructionHandleWorker {
                     visitINVOKEDYNAMIC(instructionHandle);
                     break;
                 default:
-                    throw new Exception("");
+                    throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
             }
         } else if (handle instanceof NEW) {
             visitNEW(instructionHandle);
         } else {
-            throw new Exception("");
+            throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
 
@@ -416,7 +419,7 @@ public abstract class InstructionHandleWorker {
                     visitLLOAD(instructionHandle);
                     break;
                 default:
-                    throw new Exception("");
+                    throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
             }
         } else if (handle instanceof StoreInstruction) {
             switch (handle.getOpcode()) {
@@ -456,12 +459,12 @@ public abstract class InstructionHandleWorker {
                     visitLSTORE(instructionHandle);
                     break;
                 default:
-                    throw new Exception("");
+                    throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
             }
         } else if (handle instanceof IINC) {
             visitIINC(instructionHandle);
         } else {
-            throw new Exception("");
+            throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
 
@@ -481,7 +484,7 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof RETURN) {
             visitRETURN(instructionHandle);
         } else {
-            throw new Exception("");
+            throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
 
@@ -507,7 +510,7 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof SWAP) {
             visitSWAP(instructionHandle);
         } else {
-            throw new Exception("");
+            throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
     // ARITHMETICINSTRUCTION

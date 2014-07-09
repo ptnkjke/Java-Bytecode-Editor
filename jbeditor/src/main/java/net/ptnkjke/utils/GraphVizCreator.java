@@ -1,6 +1,8 @@
 package net.ptnkjke.utils;
 
 import net.ptnkjke.Configutation;
+import net.ptnkjke.gui.main.model.ConsoleMessage;
+import net.ptnkjke.gui.main.model.MessageType;
 import org.apache.bcel.classfile.Constant;
 import org.apache.bcel.classfile.ConstantUtf8;
 import org.apache.bcel.generic.*;
@@ -155,6 +157,7 @@ public class GraphVizCreator extends InstructionHandleWorker {
             try {
                 super.visit(handle);
             } catch (Exception e) {
+                ConsoleMessage consoleMessage = new ConsoleMessage(e.getClass().getName() + " " + e.getMessage(), MessageType.CRITICAL);
                 e.printStackTrace();
             }
             handle = handle.getNext();

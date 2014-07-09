@@ -59,6 +59,9 @@ public class Controller {
 
     @FXML
     private void initialize() {
+        //
+        Static.setConsoleid(consoleid);
+
         // Загружаем по умолчанию mainPain
         GridPane root = null;
         FXMLLoader fxmlLoader = null;
@@ -78,36 +81,28 @@ public class Controller {
 
 
         // Вешаем слушателя
-        mainTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<Info>>() {
-            @Override
-            public void changed(ObservableValue<? extends TreeItem<Info>> observableValue, TreeItem<Info> oldValue, TreeItem<Info> newValue) {
-                if (newValue == null) {
-                    return;
-                }
+        mainTree.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
 
-                if (newValue.getValue() instanceof Method) {
-                    Method method = (Method) newValue.getValue();
+            if (newValue.getValue() instanceof Method) {
+                Method method = (Method) newValue.getValue();
 
-                    // Загружаем для правой части
-                    GridPane gridPane = Utils.loadView(method);
-                    secondPane.getChildren().clear();
-                    secondPane.getChildren().add(gridPane);
-                } else if (newValue.getValue() instanceof ConstantPool) {
-                    ConstantPool constantPool = (ConstantPool) newValue.getValue();
-                    Pane pane = net.ptnkjke.gui.main.panes.constanpanes.table.Static.loadView(constantPool.getClassGen().getConstantPool());
-                    secondPane.getChildren().clear();
-                    secondPane.getChildren().add(pane);
-                }
+                // Загружаем для правой части
+                GridPane gridPane = Utils.loadView(method);
+                secondPane.getChildren().clear();
+                secondPane.getChildren().add(gridPane);
+            } else if (newValue.getValue() instanceof ConstantPool) {
+                ConstantPool constantPool = (ConstantPool) newValue.getValue();
+                Pane pane = net.ptnkjke.gui.main.panes.constanpanes.table.Static.loadView(constantPool.getClassGen().getConstantPool());
+                secondPane.getChildren().clear();
+                secondPane.getChildren().add(pane);
             }
         });
 
         // Свой виджет
-        consoleid.setCellFactory(new Callback<ListView<ConsoleMessage>, ListCell<ConsoleMessage>>() {
-            @Override
-            public ListCell<ConsoleMessage> call(ListView<ConsoleMessage> param) {
-                return new FlowListCell();
-            }
-        });
+        consoleid.setCellFactory(param -> new FlowListCell());
     }
 
     public void onButtonLoadClass() {
@@ -144,15 +139,13 @@ public class Controller {
         // Принудительно загружаем класс
         //JarClassLoader classLoader = new JarClassLoader(file.getAbsolutePath());
 
-
         JarInputStream jarInputStream = null;
 
         try {
             jarInputStream = new JarInputStream(new FileInputStream(file));
         } catch (IOException e) {
-            e.printStackTrace();
-            return;
-
+            ConsoleMessage consoleMessage = new ConsoleMessage(e.getClass().getName() + " " + e.getMessage(), MessageType.WARNING);
+            Static.addMessage(consoleMessage);
         }
 
         try {
@@ -166,8 +159,8 @@ public class Controller {
                 next = jarInputStream.getNextEntry();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            return;
+            ConsoleMessage consoleMessage = new ConsoleMessage(e.getClass().getName() + " " + e.getMessage(), MessageType.WARNING);
+            Static.addMessage(consoleMessage);
         }
 
         try {
@@ -231,7 +224,7 @@ public class Controller {
             }
         } catch (ClassNotFoundException e) {
             ConsoleMessage consoleMessage = new ConsoleMessage(e.getMessage(), MessageType.WARNING);
-            consoleid.getItems().add(consoleMessage);
+            Static.addMessage(consoleMessage);
         }
 
         // METHODS
@@ -261,15 +254,6 @@ public class Controller {
     }
 
     public void saveChange() {
-        ZipFile zipFile = null;
-
-        try {
-            zipFile = new ZipFile(source);
-        } catch (ZipException e) {
-            e.printStackTrace();
-            return;
-        }
-
         // Сохраняем изменения в папке
         String extractedDir = Configutation.workDir + File.separator + net.ptnkjke.utils.Utils.getRandomName();
         for (ClassGen cg : DataActivity.changes) {

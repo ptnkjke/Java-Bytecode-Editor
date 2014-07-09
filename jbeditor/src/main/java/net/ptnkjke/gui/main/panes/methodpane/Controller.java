@@ -86,41 +86,6 @@ public class Controller {
         classGen.setMethodAt(mg.getMethod(), num);
 
         DataActivity.changes.add(classGen);
-
-
-/*
-
-        File oldText = new File("temp" + File.separator + "old.text");
-        File newText = new File("temp" + File.separator + "new.text");
-
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(oldText));
-            writer.write(textArea.getText());
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        StringBuilder sb = new StringBuilder();
-        InstructionHandle handle = mg.getInstructionList().getStart();
-
-        if (handle != null) {
-            do {
-                Editor editor = new Editor();
-                editor.visit(handle);
-
-                sb.append(editor.getResult()).append("\n");
-                handle = handle.getNext();
-            } while (handle != null);
-        }
-
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(newText));
-            writer.write(sb.toString());
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public TextArea getTextArea() {
