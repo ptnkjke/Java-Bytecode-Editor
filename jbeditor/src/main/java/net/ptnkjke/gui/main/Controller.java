@@ -13,6 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.*;
 import javafx.util.Callback;
 import net.lingala.zip4j.core.ZipFile;
@@ -21,10 +22,13 @@ import net.ptnkjke.Configutation;
 import net.ptnkjke.gui.main.model.ConsoleMessage;
 import net.ptnkjke.gui.main.model.MessageType;
 import net.ptnkjke.gui.main.model.classtree.*;
+import net.ptnkjke.gui.main.model.classtree.Attribute;
+import net.ptnkjke.gui.main.model.classtree.Constant;
+import net.ptnkjke.gui.main.model.classtree.ConstantPool;
+import net.ptnkjke.gui.main.model.classtree.Method;
 import net.ptnkjke.gui.main.panes.methodpane.Utils;
 import net.ptnkjke.service.DataActivity;
-import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.ClassGen;
 
 import java.io.File;
@@ -88,6 +92,11 @@ public class Controller {
                     GridPane gridPane = Utils.loadView(method);
                     secondPane.getChildren().clear();
                     secondPane.getChildren().add(gridPane);
+                } else if (newValue.getValue() instanceof ConstantPool) {
+                    ConstantPool constantPool = (ConstantPool) newValue.getValue();
+                    Pane pane = net.ptnkjke.gui.main.panes.constanpanes.table.Static.loadView(constantPool.getClassGen().getConstantPool());
+                    secondPane.getChildren().clear();
+                    secondPane.getChildren().add(pane);
                 }
             }
         });
@@ -139,26 +148,17 @@ public class Controller {
         JarInputStream jarInputStream = null;
 
         try {
-            ZipFile zipFile = new ZipFile("C:\\Users\\dalopatin\\Downloads\\launcher.jar");
             jarInputStream = new JarInputStream(new FileInputStream(file));
         } catch (IOException e) {
             e.printStackTrace();
             return;
 
-        } catch (ZipException e) {
-            e.printStackTrace();
         }
 
         try {
             ZipEntry next = jarInputStream.getNextEntry();
             while (next != null) {
                 if (next.getName().contains(".class")) {
-
-/*                    ByteArrayBuffer byteArrayBuffer = new ByteArrayBuffer();
-                    int data = 0;
-                    while ((data = jarInputStream.read()) != -1) {
-                        byteArrayBuffer.write(data);
-                    }*/
                     JavaClass javaClass = new ClassParser(file.getAbsolutePath(), next.getName()).parse();
 
                     addClassToTree(javaClass, false);
@@ -207,6 +207,7 @@ public class Controller {
         // CONSTANT POOL
         node = Info.createInfo("Constant Pool", ConstantPool.class);
         rootNode.getChildren().add(node);
+        ((ConstantPool) node.getValue()).setClassGen(classGen);
 
         org.apache.bcel.classfile.Constant[] constants = javaClass.getConstantPool().getConstantPool();
         for (int i = 0; i < constants.length; i++) {
