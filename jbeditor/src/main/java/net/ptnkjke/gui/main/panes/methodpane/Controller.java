@@ -64,10 +64,12 @@ public class Controller {
         graphVizCreator = new GraphVizCreator(methodGen.getInstructionList(), classGen.getConstantPool());
         File image = graphVizCreator.getImage();
 
-        try {
-            webview.getEngine().load(image.toURI().toURL().toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if(image != null) {
+            try {
+                webview.getEngine().load(image.toURI().toURL().toString());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

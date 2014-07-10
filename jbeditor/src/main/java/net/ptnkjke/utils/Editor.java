@@ -406,7 +406,7 @@ public class Editor extends InstructionHandleWorker {
         int[] mathes = lookupswitch.getMatchs();
         InstructionHandle defaultTarget = lookupswitch.getTarget();
 
-        temp.append(targets.length).append("\n");
+        temp.append(" ").append(targets.length).append("\n");
         int i = 0;
         for (InstructionHandle handle : targets) {
             temp.append("    ").append(mathes[i]).append(": ").append(handle.getPosition()).append("\n");
@@ -430,7 +430,7 @@ public class Editor extends InstructionHandleWorker {
         int[] mathes = tableswitch.getMatchs();
         InstructionHandle defaultTarget = tableswitch.getTarget();
 
-        temp.append(targets.length).append("\n");
+        temp.append(" ").append(targets.length).append("\n");
         int i = 0;
         for (InstructionHandle handle : targets) {
             temp.append("    ").append(mathes[i]).append(": ").append(handle.getPosition()).append("\n");

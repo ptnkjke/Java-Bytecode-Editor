@@ -26,8 +26,12 @@ public class JByteParser {
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
 
+            String tLine = line;
             // Убираем последние и первые пробелы, комментарии
-            String tLine = line.substring(0, line.indexOf("//")).replaceAll("\\s+$", "").replaceAll("^\\s+", "");
+            if (line.indexOf("//") != -1) {
+                tLine = line.substring(0, line.indexOf("//"));
+            }
+            tLine = tLine.replaceAll("\\s+$", "").replaceAll("^\\s+", "");
             wLines[i] = tLine;
         }
 
@@ -54,9 +58,11 @@ public class JByteParser {
             Select select = selectStruct.instruction;
             select.setTarget(target);
 
+            int counter = 0;
             for (Integer i : selectStruct.instructs) {
                 InstructionHandle handle = getHandleByPos(i);
-                select.getTargets()[i] = handle;
+                select.getTargets()[counter] = handle;
+                counter++;
             }
         }
 
@@ -349,13 +355,13 @@ public class JByteParser {
                     String tLine = lines[c];
                     String[] subs = tLine.split(":");
 
-                    match[counter] = Integer.parseInt(subs[0]);
-                    instructions_arr[counter] = Integer.parseInt(subs[1]);
+                    match[counter] = Integer.parseInt(subs[0].replaceAll(" ", ""));
+                    instructions_arr[counter] = Integer.parseInt(subs[1].replaceAll(" ", ""));
                     counter++;
                 }
-                String def_string = lines[numLine + 1 + size + 1];
+                String def_string = lines[numLine + 1 + size];
                 String[] def_subs = def_string.split(":");
-                int target = Integer.parseInt(def_subs[1]);
+                int target = Integer.parseInt(def_subs[1].replaceAll(" ", ""));
 
                 selectStructs.add(new SelectStruct((TABLESWITCH) instruction, instructions_arr, target));
                 return 1 + size + 1;
@@ -375,14 +381,14 @@ public class JByteParser {
                     String tLine = lines[c];
                     String[] subs = tLine.split(":");
 
-                    match[counter] = Integer.parseInt(subs[0]);
-                    instructions_arr[counter] = Integer.parseInt(subs[1]);
+                    match[counter] = Integer.parseInt(subs[0].replaceAll(" ", ""));
+                    instructions_arr[counter] = Integer.parseInt(subs[1].replaceAll(" ", ""));
                     counter++;
                 }
 
-                def_string = lines[numLine + 1 + size + 1];
+                def_string = lines[numLine + 1 + size];
                 def_subs = def_string.split(":");
-                target = Integer.parseInt(def_subs[1]);
+                target = Integer.parseInt(def_subs[1].replaceAll(" ", ""));
 
                 selectStructs.add(new SelectStruct((LOOKUPSWITCH) instruction, instructions_arr, target));
                 return 1 + size + 1;
