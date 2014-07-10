@@ -1,7 +1,5 @@
 package net.ptnkjke.gui.main.model;
 
-import sun.plugin2.message.Message;
-
 /**
  * Created by Lopatin on 08.07.2014.
  */
