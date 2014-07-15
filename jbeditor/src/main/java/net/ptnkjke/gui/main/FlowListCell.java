@@ -29,9 +29,7 @@ public class FlowListCell extends ListCell<ConsoleMessage> {
                 text.setFill(Color.DARKBLUE);
             }
 
-            Hyperlink hyperlink = new Hyperlink("description");
-
-            hyperlink.setOnMousePressed(event -> System.out.println("asd"));
+            Hyperlink hyperlink = new Hyperlink("[description]");
 
 
             textFlow.getChildren().addAll(text);

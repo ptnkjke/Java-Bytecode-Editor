@@ -12,8 +12,11 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.*;
 import javafx.util.Callback;
 import net.lingala.zip4j.core.ZipFile;
@@ -34,6 +37,7 @@ import org.apache.bcel.generic.ClassGen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -42,6 +46,8 @@ import java.util.zip.ZipEntry;
  */
 public class Controller {
 
+    @FXML
+    private VBox root;
     @FXML
     private GridPane firstPane;
     @FXML
@@ -109,9 +115,14 @@ public class Controller {
         // Вызываем диалоговое окно для выбора файла
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters(); // TODO: Добавить фильтр для расширений
+        fileChooser.getExtensionFilters()
+                .addAll(
+                        new FileChooser.ExtensionFilter("Java Class", "*.class"),
+                        new FileChooser.ExtensionFilter("Jar", "*.jar")
+                );
 
         source = fileChooser.showOpenDialog(null);
+
         // Если файл не пустой, то производим открытие
         if (source == null) {
             return;
@@ -121,7 +132,7 @@ public class Controller {
         openFile(source);
     }
 
-    private void openFile(File file) {
+    public void openFile(File file) {
 
         TreeItem<Info> rootNode = Info.createInfo(file.getName(), Root.class);
         mainTree.setRoot(rootNode);
@@ -144,7 +155,11 @@ public class Controller {
         try {
             jarInputStream = new JarInputStream(new FileInputStream(file));
         } catch (IOException e) {
-            ConsoleMessage consoleMessage = new ConsoleMessage(e.getClass().getName() + " " + e.getMessage(), MessageType.WARNING);
+            ConsoleMessage consoleMessage = new ConsoleMessage(
+                    e.getClass().getName() + " " + e.getMessage(),
+                    MessageType.WARNING,
+                    "exception.openJarfile.IOException",
+                    e);
             Static.addMessage(consoleMessage);
         }
 
@@ -159,14 +174,23 @@ public class Controller {
                 next = jarInputStream.getNextEntry();
             }
         } catch (IOException e) {
-            ConsoleMessage consoleMessage = new ConsoleMessage(e.getClass().getName() + " " + e.getMessage(), MessageType.WARNING);
+            ConsoleMessage consoleMessage = new ConsoleMessage(
+                    e.getClass().getName() + " " + e.getMessage(),
+                    MessageType.WARNING,
+                    "exception.openJarfile.IOException2",
+                    e);
             Static.addMessage(consoleMessage);
         }
 
         try {
             jarInputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            ConsoleMessage consoleMessage = new ConsoleMessage(
+                    e.getClass().getName() + " " + e.getMessage(),
+                    MessageType.WARNING,
+                    "exception.openJarfile.IOException3",
+                    e);
+            Static.addMessage(consoleMessage);
         }
     }
 
@@ -223,7 +247,11 @@ public class Controller {
                 node.getChildren().add(inner);
             }
         } catch (ClassNotFoundException e) {
-            ConsoleMessage consoleMessage = new ConsoleMessage(e.getMessage(), MessageType.WARNING);
+            ConsoleMessage consoleMessage = new ConsoleMessage(
+                    e.getMessage(),
+                    MessageType.WARNING,
+                    "exception.addClassToTree.ClassNotFound",
+                    e);
             Static.addMessage(consoleMessage);
         }
 
@@ -297,5 +325,9 @@ public class Controller {
         });
 
         dialog.show();
+    }
+
+    public void onAbout() {
+
     }
 }

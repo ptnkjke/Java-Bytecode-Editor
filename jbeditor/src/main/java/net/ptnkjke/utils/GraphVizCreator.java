@@ -157,7 +157,11 @@ public class GraphVizCreator extends InstructionHandleWorker {
             try {
                 super.visit(handle);
             } catch (Exception e) {
-                ConsoleMessage consoleMessage = new ConsoleMessage(e.getClass().getName() + " " + e.getMessage(), MessageType.CRITICAL);
+                ConsoleMessage consoleMessage = new ConsoleMessage(
+                        e.getClass().getName() + " " + e.getMessage(),
+                        MessageType.CRITICAL,
+                        "not_yet_info",
+                        e);
                 e.printStackTrace();
             }
             handle = handle.getNext();

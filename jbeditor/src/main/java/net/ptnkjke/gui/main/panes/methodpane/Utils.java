@@ -22,6 +22,7 @@ public class Utils {
 
         try {
             gridPane = (GridPane) fxmlLoader.load(Utils.class.getResource("/net/ptnkjke/gui/main/panes/methodpane/View.fxml").openStream());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
