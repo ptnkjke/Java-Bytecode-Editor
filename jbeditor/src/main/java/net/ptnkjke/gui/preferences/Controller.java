@@ -27,7 +27,7 @@ public class Controller {
 
     public void chooseGraphVizFile() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters(); // TODO: Добавить фильтр
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("EXE","*.exe"));
 
         File file = fileChooser.showOpenDialog(null);
 

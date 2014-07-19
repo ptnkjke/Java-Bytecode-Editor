@@ -1,4 +1,4 @@
-package net.ptnkjke.gui.main.panes.constanpanes.table;
+package net.ptnkjke.gui.main.constantpanes.table;
 
 /**
  * Created by Lopatin on 09.07.2014.

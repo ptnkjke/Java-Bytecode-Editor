@@ -1,26 +1,19 @@
 package net.ptnkjke.gui.main;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.*;
-import javafx.util.Callback;
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 import net.ptnkjke.Configutation;
 import net.ptnkjke.gui.main.model.ConsoleMessage;
 import net.ptnkjke.gui.main.model.MessageType;
@@ -31,13 +24,13 @@ import net.ptnkjke.gui.main.model.classtree.ConstantPool;
 import net.ptnkjke.gui.main.model.classtree.Method;
 import net.ptnkjke.gui.main.panes.methodpane.Utils;
 import net.ptnkjke.service.DataActivity;
+import org.apache.bcel.Constants;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.ClassGen;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -101,9 +94,59 @@ public class Controller {
                 secondPane.getChildren().add(gridPane);
             } else if (newValue.getValue() instanceof ConstantPool) {
                 ConstantPool constantPool = (ConstantPool) newValue.getValue();
-                Pane pane = net.ptnkjke.gui.main.panes.constanpanes.table.Static.loadView(constantPool.getClassGen().getConstantPool());
+                TabPane pane = net.ptnkjke.gui.main.constantpanes.table.Static.loadView(constantPool.getClassGen());
                 secondPane.getChildren().clear();
                 secondPane.getChildren().add(pane);
+            } else if (newValue.getValue() instanceof Constant) {
+                Constant constant = (Constant) newValue.getValue();
+                org.apache.bcel.classfile.Constant const_bcel = constant.getConstant();
+                switch (constant.getConstant().getTag()) {
+                    case Constants.CONSTANT_Utf8:
+                        ConstantUtf8 utf8 = (ConstantUtf8) const_bcel;
+                        break;
+                    case Constants.CONSTANT_Integer:
+                        ConstantInteger integer = (ConstantInteger) const_bcel;
+                        break;
+                    case Constants.CONSTANT_Float:
+                        ConstantFloat constantFloat = (ConstantFloat) const_bcel;
+                        break;
+                    case Constants.CONSTANT_Long:
+                        ConstantLong constantLong = (ConstantLong) const_bcel;
+                        break;
+                    case Constants.CONSTANT_Double:
+                        ConstantDouble constantDouble = (ConstantDouble) const_bcel;
+                        break;
+                    case Constants.CONSTANT_Class:
+                        ConstantClass constantClass = (ConstantClass) const_bcel;
+                        break;
+                    case Constants.CONSTANT_Fieldref:
+                        ConstantFieldref fieldref = (ConstantFieldref) const_bcel;
+                        break;
+                    case Constants.CONSTANT_String:
+                        ConstantString string = (ConstantString) const_bcel;
+                        break;
+                    case Constants.CONSTANT_Methodref:
+                        ConstantMethodref methodref = (ConstantMethodref) const_bcel;
+                        break;
+                    case Constants.CONSTANT_InterfaceMethodref:
+                        ConstantInterfaceMethodref interfaceMethodref = (ConstantInterfaceMethodref) const_bcel;
+                        break;
+                    case Constants.CONSTANT_NameAndType:
+                        ConstantNameAndType nameAndType = (ConstantNameAndType) const_bcel;
+                        break;
+                    case Constants.CONSTANT_MethodHandle:
+                        ConstantMethodHandle methodHandle = (ConstantMethodHandle) const_bcel;
+                        break;
+                    case Constants.CONSTANT_MethodType:
+                        ConstantMethodType methodType = (ConstantMethodType) const_bcel;
+                        break;
+                    default:
+                        try {
+                            throw new Exception("");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                }
             }
         });
 
@@ -233,6 +276,7 @@ public class Controller {
                 continue;
             }
             TreeItem<Info> inner = Info.createInfo("[" + i + "] " + constant.toString(), Constant.class);
+            ((Constant) inner.getValue()).setConstant(constant);
             node.getChildren().add(inner);
         }
 
