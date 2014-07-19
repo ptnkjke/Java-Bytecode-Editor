@@ -1,14 +1,11 @@
 package net.ptnkjke.gui.main.constantpanes.table;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
-import net.ptnkjke.service.DataActivity;
 import net.ptnkjke.utils.CellConstantWorker;
-import net.ptnkjke.utils.ConstantParser;
 import net.ptnkjke.utils.TextConstantWorker;
 import org.apache.bcel.classfile.Constant;
 import org.apache.bcel.generic.ClassGen;
@@ -20,8 +17,6 @@ import org.apache.bcel.generic.ConstantPoolGen;
 public class Controller {
     @FXML
     private TableView<ConstantTableCell> table;
-    @FXML
-    private TextArea textArea;
 
     private ClassGen classGen;
 
@@ -81,27 +76,5 @@ public class Controller {
 
             sb.append(textConstantWorker.getText()).append("\n");
         }
-
-        textArea.setText(sb.toString());
-    }
-
-    public void onSave() {
-        ConstantPoolGen cpg = ConstantParser.get(textArea.getText());
-
-        ClassGen activ = null;
-        for (ClassGen cg : DataActivity.changes) {
-            if (this.classGen.getClassName().equals(cg.getClassName())) {
-                activ = cg;
-                break;
-            }
-        }
-
-        if (activ != null) {
-            activ.setConstantPool(cpg);
-        } else {
-            DataActivity.changes.add(classGen);
-        }
-
-        classGen.setConstantPool(cpg);
     }
 }

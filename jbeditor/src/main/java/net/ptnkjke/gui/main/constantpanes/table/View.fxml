@@ -32,15 +32,5 @@
             </GridPane>
          </content>
       </Tab>
-      <Tab text="Text">
-         <content>
-            <VBox alignment="CENTER">
-               <children>
-                  <TextArea fx:id="textArea" prefHeight="370.0" prefWidth="598.0" VBox.vgrow="SOMETIMES" />
-                  <Button mnemonicParsing="false" onAction="#onSave" text="Save" VBox.vgrow="NEVER" />
-               </children>
-            </VBox>
-         </content>
-      </Tab>
    </tabs>
 </TabPane>
