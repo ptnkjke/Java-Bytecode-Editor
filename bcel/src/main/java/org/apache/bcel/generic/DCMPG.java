@@ -18,29 +18,25 @@
 package org.apache.bcel.generic;
 
 /** 
- * DCMPG - Compare doubles: value1 > value2
- * <PRE>Stack: ..., value1.word1, value1.word2, value2.word1, value2.word2 -&gt;</PRE>
- *        ..., result
+ * DCMPG - Compare doubles: value1 &gt; value2
+ * <PRE>Stack: ..., value1.word1, value1.word2, value2.word1, value2.word2 -&gt; ..., result</PRE>
  *
- * @version $Id: DCMPG.java 1152072 2011-07-29 01:54:05Z dbrosius $
+ * @version $Id: DCMPG.java 1620239 2014-08-24 23:40:27Z ebourg $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class DCMPG extends Instruction implements TypedInstruction, StackProducer, StackConsumer {
 
     private static final long serialVersionUID = 1929664840821745262L;
 
-
     public DCMPG() {
         super(org.apache.bcel.Constants.DCMPG, (short) 1);
     }
-
 
     /** @return Type.DOUBLE
      */
     public Type getType( ConstantPoolGen cp ) {
         return Type.DOUBLE;
     }
-
 
     /**
      * Call corresponding visitor method(s). The order is:

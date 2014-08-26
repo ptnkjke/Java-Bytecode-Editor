@@ -28,7 +28,7 @@ import org.apache.bcel.generic.InstructionHandle;
  * to information like control flow successors and
  * such.
  *
- * @version $Id: InstructionContext.java 1598766 2014-05-30 22:51:27Z sebb $
+ * @version $Id: InstructionContext.java 1619801 2014-08-22 13:30:36Z britter $
  * @author Enver Haase
  */
 public interface InstructionContext{
@@ -70,7 +70,7 @@ public interface InstructionContext{
      *
      * @see ControlFlowGraph
      * @see ExecutionVisitor
-     * @see #getOutFrame(List)
+     * @see #getOutFrame(ArrayList)
      * @return true -  if and only if the "outgoing" frame situation
      * changed from the one before execute()ing.
      */

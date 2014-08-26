@@ -33,7 +33,7 @@ import org.apache.bcel.verifier.exc.Utility;
  * More detailed information is to be found at the do_verify() method's
  * documentation.
  *
- * @version $Id: Pass1Verifier.java 1606484 2014-06-29 12:10:24Z ggregory $
+ * @version $Id: Pass1Verifier.java 1620239 2014-08-24 23:40:27Z ebourg $
  * @author Enver Haase
  * @see #do_verify()
  */
@@ -112,7 +112,7 @@ public final class Pass1Verifier extends PassVerifier{
      *   <LI> All undocumented access flags are masked off before use. Strictly speaking, this is not really a check.
      *   <LI> The field this_class should point to a string that represents a legal non-array class name, and this name should be the same as the class file being loaded.
      *   <LI> the field super_class should point to a string that represents a legal non-array class name.
-     *   <LI> Because some of the above checks require cross referencing the constant pool entries, guards are set up to make sure that the referenced entries are of the right type and the indices are within the legal range (0 < index < constant_pool_count).
+     *   <LI> Because some of the above checks require cross referencing the constant pool entries, guards are set up to make sure that the referenced entries are of the right type and the indices are within the legal range (0 &lt; index &lt; constant_pool_count).
      *  </UL>
      *  <LI> Extra checks done in pass 1:
      *  <UL>
@@ -122,12 +122,12 @@ public final class Pass1Verifier extends PassVerifier{
      *  </UL>
      * </UL>
      * (From the Paper <A HREF=http://www.cs.sfu.ca/people/GradStudents/pwfong/personal/JVM/pass1/>The Mysterious Pass One, first draft, September 2, 1997</A>.)
-     * </BR>
-     * However, most of this is done by parsing a class file or generating a class file into BCEL's internal data structure.
+     * 
+     * <P>However, most of this is done by parsing a class file or generating a class file into BCEL's internal data structure.
      * <B>Therefore, all that is really done here is look up the class file from BCEL's repository.</B>
      * This is also motivated by the fact that some omitted things
      * (like the check for extra bytes at the end of the class file) are handy when actually using BCEL to repair a class file (otherwise you would not be
-     * able to load it into BCEL).
+     * able to load it into BCEL).</P>
      *
      * @see org.apache.bcel.Repository
      */

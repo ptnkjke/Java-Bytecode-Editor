@@ -19,9 +19,9 @@ package org.apache.bcel.generic;
 
 /** 
  * LLOAD - Load long from local variable
- *<PRE>Stack ... -&GT; ..., result.word1, result.word2</PRE>
+ *<PRE>Stack ... -&gt; ..., result.word1, result.word2</PRE>
  *
- * @version $Id: LLOAD.java 1152072 2011-07-29 01:54:05Z dbrosius $
+ * @version $Id: LLOAD.java 1620239 2014-08-24 23:40:27Z ebourg $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class LLOAD extends LoadInstruction {

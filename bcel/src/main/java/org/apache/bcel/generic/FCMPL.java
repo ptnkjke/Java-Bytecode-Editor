@@ -18,10 +18,10 @@
 package org.apache.bcel.generic;
 
 /** 
- * FCMPL - Compare floats: value1 < value2
+ * FCMPL - Compare floats: value1 &lt; value2
  * <PRE>Stack: ..., value1, value2 -&gt; ..., result</PRE>
  *
- * @version $Id: FCMPL.java 1152072 2011-07-29 01:54:05Z dbrosius $
+ * @version $Id: FCMPL.java 1620239 2014-08-24 23:40:27Z ebourg $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  */
 public class FCMPL extends Instruction implements TypedInstruction, StackProducer, StackConsumer {

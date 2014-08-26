@@ -45,7 +45,7 @@ import org.apache.bcel.util.ByteSequence;
  * A list is finally dumped to a byte code array with <a
  * href="#getByteCode()">getByteCode</a>.
  *
- * @version $Id: InstructionList.java 1598766 2014-05-30 22:51:27Z sebb $
+ * @version $Id: InstructionList.java 1620239 2014-08-24 23:40:27Z ebourg $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see     Instruction
  * @see     InstructionHandle
@@ -1123,8 +1123,7 @@ public class InstructionList implements Serializable {
     /**
      * Delete contents of list. Provides besser memory utilization,
      * because the system then may reuse the instruction handles. This
-     * method is typically called right after
-     * <href="MethodGen.html#getMethod()">MethodGen.getMethod()</a>.
+     * method is typically called right after {@link MethodGen#getMethod()}.
      */
     public void dispose() {
         // Traverse in reverse order, because ih.next is overwritten

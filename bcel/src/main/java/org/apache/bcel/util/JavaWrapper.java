@@ -24,15 +24,15 @@ import java.lang.reflect.Modifier;
  * Java interpreter replacement, i.e., wrapper that uses its own ClassLoader
  * to modify/generate classes as they're requested. You can take this as a template
  * for your own applications.<br>
- * Call this wrapper with
+ * Call this wrapper with:
+ * 
  * <pre>java org.apache.bcel.util.JavaWrapper &lt;real.class.name&gt; [arguments]</pre>
- * <p>
- * To use your own class loader you can set the "bcel.classloader" system property
- * which defaults to "org.apache.bcel.util.ClassLoader", e.g., with
+ * 
+ * <p>To use your own class loader you can set the "bcel.classloader" system property
+ * which defaults to "org.apache.bcel.util.ClassLoader", e.g., with:</p>
  * <pre>java org.apache.bcel.util.JavaWrapper -Dbcel.classloader=foo.MyLoader &lt;real.class.name&gt; [arguments]</pre>
- * </p>
  *
- * @version $Id: JavaWrapper.java 1149459 2011-07-22 04:34:27Z dbrosius $
+ * @version $Id: JavaWrapper.java 1620239 2014-08-24 23:40:27Z ebourg $
  * @author  <A HREF="mailto:m.dahm@gmx.de">M. Dahm</A>
  * @see ClassLoader
  */

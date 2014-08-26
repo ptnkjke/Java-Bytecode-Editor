@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.scene.canvas.*?>
-<?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <TabPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.ptnkjke.gui.main.constantpanes.table.Controller">
@@ -18,6 +16,8 @@
                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
+<VBox alignment="CENTER">
+<children>
                   <TableView fx:id="table" prefHeight="398.0" prefWidth="598.0">
                      <columns>
                         <TableColumn prefWidth="183.0" text="id" />
@@ -27,7 +27,9 @@
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
-                  </TableView>
+                  </TableView><Button alignment="CENTER" mnemonicParsing="false" onAction="#saveConstants" text="Accept" />
+</children>
+</VBox>
                </children>
             </GridPane>
          </content>
