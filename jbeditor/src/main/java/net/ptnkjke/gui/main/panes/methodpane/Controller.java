@@ -84,6 +84,8 @@ public class Controller {
         org.apache.bcel.classfile.Method old = classGen.getMethodAt(num);
 
         MethodGen mg = new MethodGen(old, classGen.getClassName(), classGen.getConstantPool());
+        mg.removeLineNumbers();
+        mg.removeLocalVariables();
         mg.setInstructionList(instructionList);
         classGen.setMethodAt(mg.getMethod(), num);
 
