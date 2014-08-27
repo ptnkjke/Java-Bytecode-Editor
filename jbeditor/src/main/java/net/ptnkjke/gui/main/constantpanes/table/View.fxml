@@ -18,7 +18,7 @@
                <children>
 <VBox alignment="CENTER">
 <children>
-                  <TableView fx:id="table" prefHeight="398.0" prefWidth="598.0">
+                  <TableView fx:id="table" prefHeight="398.0" prefWidth="598.0" VBox.vgrow="SOMETIMES">
                      <columns>
                         <TableColumn prefWidth="183.0" text="id" />
                         <TableColumn minWidth="0.0" prefWidth="207.0" text="Type" />
