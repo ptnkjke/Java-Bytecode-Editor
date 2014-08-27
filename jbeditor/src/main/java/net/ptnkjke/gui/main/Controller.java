@@ -1,5 +1,6 @@
 package net.ptnkjke.gui.main;
 
+import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +32,7 @@ import org.apache.bcel.generic.ClassGen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -216,6 +218,10 @@ public class Controller {
                 }
                 next = jarInputStream.getNextEntry();
             }
+
+            // Сортируем дерево на выходе
+            FXCollections.sort(mainTree.getRoot().getChildren(), (o1, o2) -> o1.getValue().getTitle().compareTo(o2.getValue().getTitle()));
+
         } catch (IOException e) {
             ConsoleMessage consoleMessage = new ConsoleMessage(
                     e.getClass().getName() + " " + e.getMessage(),
@@ -325,6 +331,7 @@ public class Controller {
         }
     }
 
+    //  Сохранение изменений
     public void saveChange() {
         // Сохраняем изменения в папке
         String extractedDir = Configutation.workDir + File.separator + net.ptnkjke.utils.Utils.getRandomName();
@@ -343,6 +350,7 @@ public class Controller {
         DataActivity.changes.clear();
     }
 
+    // Окно с настройками
     public void openPreferences() {
         Parent root = null;
         try {
