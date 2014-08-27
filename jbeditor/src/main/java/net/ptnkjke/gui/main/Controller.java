@@ -149,6 +149,13 @@ public class Controller {
                             e.printStackTrace();
                         }
                 }
+            } else if (newValue.getValue() instanceof GeneralInformation) {
+                ClassGen cg = ((GeneralInformation) newValue.getValue()).getClassGen();
+
+                // Загружаем для правой части
+                VBox vbox = net.ptnkjke.gui.main.panes.generalinfopane.Utils.loadView(cg);
+                secondPane.getChildren().clear();
+                secondPane.getChildren().add(vbox);
             }
         });
 
@@ -268,6 +275,7 @@ public class Controller {
         TreeItem<Info> node = null;
         // GENERAL INFORMATION
         node = Info.createInfo("General Information", GeneralInformation.class);
+        ((GeneralInformation) node.getValue()).setClassGen(classGen);
         rootNode.getChildren().add(node);
 
         // CONSTANT POOL
