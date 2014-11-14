@@ -12,7 +12,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.*;
 import net.ptnkjke.Configutation;
@@ -23,7 +22,8 @@ import net.ptnkjke.gui.main.model.classtree.Attribute;
 import net.ptnkjke.gui.main.model.classtree.Constant;
 import net.ptnkjke.gui.main.model.classtree.ConstantPool;
 import net.ptnkjke.gui.main.model.classtree.Method;
-import net.ptnkjke.gui.main.panes.methodpane.Utils;
+import net.ptnkjke.gui.main.panes.methodpane.MethodModel;
+import net.ptnkjke.gui.main.panes.methodpane.MethodUtils;
 import net.ptnkjke.service.DataActivity;
 import org.apache.bcel.Constants;
 import org.apache.bcel.classfile.*;
@@ -32,7 +32,6 @@ import org.apache.bcel.generic.ClassGen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -91,7 +90,11 @@ public class Controller {
                 Method method = (Method) newValue.getValue();
 
                 // Загружаем для правой части
-                GridPane gridPane = Utils.loadView(method);
+                MethodModel m = new MethodModel();
+                m.setMethodBCEL(method);
+
+                GridPane gridPane = MethodUtils.loadView(m);
+
                 secondPane.getChildren().clear();
                 secondPane.getChildren().add(gridPane);
             } else if (newValue.getValue() instanceof ConstantPool) {

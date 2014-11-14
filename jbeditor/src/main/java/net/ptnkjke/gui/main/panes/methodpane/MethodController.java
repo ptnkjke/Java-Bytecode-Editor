@@ -2,42 +2,58 @@ package net.ptnkjke.gui.main.panes.methodpane;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.web.WebView;
 import net.ptnkjke.gui.main.model.classtree.Method;
 import net.ptnkjke.service.DataActivity;
 import net.ptnkjke.utils.Editor;
 import net.ptnkjke.utils.GraphVizCreator;
-import net.ptnkjke.utils.JByteParser;
+import net.ptnkjke.logic.bcel.JByteParser;
 import org.apache.bcel.generic.*;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.MalformedURLException;
 
 
 /**
  * Created by Lopatin on 05.07.2014.
  */
-public class Controller {
+public class MethodController {
+    // code[bcel]
     @FXML
-    private TextArea textArea;
+    private TextArea codeBcel;
+    @FXML
+    private TextArea codeAsm;
     @FXML
     private WebView webview;
 
     private GraphVizCreator graphVizCreator;
 
+    private MethodModel model;
+
     private ClassGen classGen;
     private Method method;
+
+
+    public void setModel(MethodModel model) {
+        this.model = model;
+
+        if (model.getGraphPath() != null) {
+            webview.getEngine().load(model.getGraphPath());
+        }
+        if (model.getCodeBCEL() != null) {
+            codeBcel.setText(model.getCodeBCEL());
+        }
+        if (model.getCodeASM() != null) {
+            codeAsm.setText(model.getCodeASM());
+        }
+    }
 
     public void setMethod(Method method) {
         this.method = method;
         classGen = method.getClassGen();
         int num = method.getMethodIndex();
 
+        // Получаем текстовое представление байт-кода с помощью BCEL
         MethodGen methodGen = new MethodGen(classGen.getMethodAt(num),
                 classGen.getClassName(),
                 classGen.getConstantPool());
@@ -59,12 +75,13 @@ public class Controller {
             } while (handle != null);
         }
 
-        textArea.setText(sb.toString());
+        codeBcel.setText(sb.toString());
 
+        // Строим график GraphViz
         graphVizCreator = new GraphVizCreator(methodGen.getInstructionList(), classGen.getConstantPool());
         File image = graphVizCreator.getImage();
 
-        if(image != null) {
+        if (image != null) {
             try {
                 webview.getEngine().load(image.toURI().toURL().toString());
             } catch (MalformedURLException e) {
@@ -77,7 +94,7 @@ public class Controller {
         JByteParser jByteParser = new JByteParser();
         ConstantPoolGen constantPoolGen = classGen.getConstantPool();
 
-        jByteParser.parse(textArea.getText(), constantPoolGen);
+        jByteParser.parse(codeBcel.getText(), constantPoolGen);
         InstructionList instructionList = jByteParser.getInstructions();
 
         int num = method.getMethodIndex();
@@ -92,11 +109,11 @@ public class Controller {
         DataActivity.changes.add(classGen);
     }
 
-    public TextArea getTextArea() {
-        return textArea;
+    public TextArea getCodeBcel() {
+        return codeBcel;
     }
 
-    public void setTextArea(TextArea textArea) {
-        this.textArea = textArea;
+    public void setCodeBcel(TextArea codeBcel) {
+        this.codeBcel = codeBcel;
     }
 }

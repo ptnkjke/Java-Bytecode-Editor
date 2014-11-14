@@ -3,10 +3,8 @@ package net.ptnkjke.gui.main.constantpanes.table;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.Pane;
 import net.ptnkjke.gui.main.panes.methodpane.*;
 import org.apache.bcel.generic.ClassGen;
-import org.apache.bcel.generic.ConstantPoolGen;
 
 import java.io.IOException;
 
@@ -24,7 +22,7 @@ public class Static {
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
 
         try {
-            pane = (TabPane) fxmlLoader.load(Utils.class.getResource("/net/ptnkjke/gui/main/constantpanes/table/View.fxml").openStream());
+            pane = (TabPane) fxmlLoader.load(MethodUtils.class.getResource("/net/ptnkjke/gui/main/constantpanes/table/View.fxml").openStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
