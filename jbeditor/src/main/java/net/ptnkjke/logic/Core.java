@@ -16,9 +16,11 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 
 /**
- * Created by dalopatin on 14.11.2014.
+ * CORE
  */
 public class Core {
+    public static Core INSTANCE = new Core();
+
     /**
      * key= ClassName, value = byte class represent
      */
@@ -71,7 +73,7 @@ public class Core {
             while (next != null) {
                 if (next.getName().contains(".class")) {
                     JavaClass javaClass = new ClassParser(jarFile.getAbsolutePath(), next.getName()).parse();
-                    classMap.put(next.getName(), javaClass.getBytes());
+                    classMap.put(next.getName().replace("/", ".").replace(".class", ""), javaClass.getBytes());
                 }
 
                 next = jarInputStream.getNextEntry();
@@ -119,16 +121,31 @@ public class Core {
      */
     private void saveJar() {
         File workDir = new File(Configutation.workDir, Utils.getRandomName());
+        workDir.mkdirs();
+
         // CreateTmpFile
-        File tFile = new File(workDir, Utils.getRandomName());
+        File tFile = new File(workDir, Utils.getRandomName() + ".jar");
 
         try {
-            OutputStream outputStream = new FileOutputStream(tFile);
+            tFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        OutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(tFile);
             outputStream.write(originalJar);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         // CreateZipFile
@@ -139,16 +156,18 @@ public class Core {
             e.printStackTrace();
         }
 
+        workDir = new File(workDir, "classes");
         // UpdateAllClassFile
         for (Map.Entry<String, byte[]> entry : classMap.entrySet()) {
             String className = entry.getKey();
             byte[] content = entry.getValue();
 
             className = className.replace(".", "/");
-            String path = className.replace(".", "/") + ".class";
+
+            String path = className + ".class";
 
             File f = new File(workDir, path);
-            OutputStream outputStream = null;
+            f.getParentFile().mkdirs();
 
             try {
                 outputStream = new FileOutputStream(f);
@@ -164,7 +183,30 @@ public class Core {
                     e.printStackTrace();
                 }
             }
+        }
+        File [] allPackages = workDir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return new File(dir, name).isDirectory();
+            }
+        });
 
+        File [] allFiles = workDir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return new File(dir, name).isFile();
+            }
+        });
+
+        for (File f : allPackages) {
+            try {
+                zipFile.addFolder(f, new ZipParameters());
+            } catch (ZipException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(File f : allFiles){
             try {
                 zipFile.addFile(f, new ZipParameters());
             } catch (ZipException e) {
@@ -204,5 +246,30 @@ public class Core {
                 }
             }
         }
+    }
+
+
+    public byte[] getOriginalJar() {
+        return originalJar;
+    }
+
+    public void setOriginalJar(byte[] originalJar) {
+        this.originalJar = originalJar;
+    }
+
+    public boolean isJarFileLoaded() {
+        return isJarFileLoaded;
+    }
+
+    public void setJarFileLoaded(boolean isJarFileLoaded) {
+        this.isJarFileLoaded = isJarFileLoaded;
+    }
+
+    public Map<String, byte[]> getClassMap() {
+        return classMap;
+    }
+
+    public void setClassMap(Map<String, byte[]> classMap) {
+        this.classMap = classMap;
     }
 }

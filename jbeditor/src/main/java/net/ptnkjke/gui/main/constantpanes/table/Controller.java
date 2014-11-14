@@ -1,22 +1,16 @@
 package net.ptnkjke.gui.main.constantpanes.table;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.util.Callback;
-import net.ptnkjke.service.DataActivity;
+import net.ptnkjke.logic.Core;
 import net.ptnkjke.utils.CellConstantWorker;
-import net.ptnkjke.utils.TextConstantWorker;
 import org.apache.bcel.Constants;
-import org.apache.bcel.classfile.*;
+import org.apache.bcel.classfile.Constant;
+import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.*;
 
 import java.util.ArrayList;
@@ -188,8 +182,8 @@ public class Controller {
             // Вставляем обновлённые методы обратно и радуемся
             classGen.setMethods(changes.toArray(new Method[changes.size()]));
 
-            // Помечаем наш класс, как изменённы
-            DataActivity.changes.add(classGen);
+            // Update bytes in Core
+            Core.INSTANCE.getClassMap().put(classGen.getClassName(), classGen.getJavaClass().getBytes());
         }
     }
 

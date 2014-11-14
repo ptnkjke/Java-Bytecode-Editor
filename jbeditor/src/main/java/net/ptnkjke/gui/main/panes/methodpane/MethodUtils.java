@@ -29,7 +29,7 @@ public class MethodUtils {
         gridPane.setMaxHeight(10000);
 
         MethodController controller = fxmlLoader.getController();
-        controller.setMethod(model.getMethodBCEL());
+        controller.setModel(model);
         return gridPane;
     }
 }

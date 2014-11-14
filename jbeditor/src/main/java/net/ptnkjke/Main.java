@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
+import net.ptnkjke.logic.Core;
 import net.ptnkjke.logic.asm.bytecode.BCClassVisitor;
 import net.ptnkjke.logic.asm.bytecode.BCMethodVisitor;
 import org.objectweb.asm.ClassReader;
@@ -79,7 +80,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         // TESTING CASE DELETE IT !!!:
-        try {
+/*        try {
             ClassReader             classReader = new ClassReader(new FileInputStream("C:\\Main1.class"));
             BCClassVisitor visitor = new BCClassVisitor();
             classReader.accept(visitor, 0);
@@ -98,7 +99,7 @@ public class Main extends Application {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         //
 
         try {

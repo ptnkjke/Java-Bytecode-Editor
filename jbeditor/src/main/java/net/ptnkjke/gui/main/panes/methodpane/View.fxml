@@ -22,7 +22,7 @@
                   <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
                         <TextArea fx:id="codeBcel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="512.0" prefWidth="177.0" VBox.vgrow="ALWAYS" />
-                        <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#testSave" text="Accept Change" VBox.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#acceptBCELChange" text="Accept Change" VBox.vgrow="NEVER" />
                      </children>
                   </VBox>
                </content>

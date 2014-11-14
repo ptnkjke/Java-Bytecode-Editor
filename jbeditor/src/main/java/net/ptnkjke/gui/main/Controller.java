@@ -17,14 +17,14 @@ import javafx.stage.*;
 import net.ptnkjke.Configutation;
 import net.ptnkjke.gui.main.model.ConsoleMessage;
 import net.ptnkjke.gui.main.model.MessageType;
-import net.ptnkjke.gui.main.model.classtree.*;
 import net.ptnkjke.gui.main.model.classtree.Attribute;
+import net.ptnkjke.gui.main.model.classtree.*;
 import net.ptnkjke.gui.main.model.classtree.Constant;
 import net.ptnkjke.gui.main.model.classtree.ConstantPool;
 import net.ptnkjke.gui.main.model.classtree.Method;
 import net.ptnkjke.gui.main.panes.methodpane.MethodModel;
 import net.ptnkjke.gui.main.panes.methodpane.MethodUtils;
-import net.ptnkjke.service.DataActivity;
+import net.ptnkjke.logic.Core;
 import org.apache.bcel.Constants;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.ClassGen;
@@ -90,8 +90,7 @@ public class Controller {
                 Method method = (Method) newValue.getValue();
 
                 // Загружаем для правой части
-                MethodModel m = new MethodModel();
-                m.setMethodBCEL(method);
+                MethodModel m = new MethodModel(method.getClassGen().getClassName(), method.getMethodIndex());
 
                 GridPane gridPane = MethodUtils.loadView(m);
 
@@ -198,6 +197,8 @@ public class Controller {
             classFile = true;
             openClassFile(file);
         }
+
+        Core.INSTANCE.read(file.getAbsolutePath());
 
     }
 
@@ -342,23 +343,11 @@ public class Controller {
         }
     }
 
-    //  Сохранение изменений
+    /**
+     * Save Change
+     */
     public void saveChange() {
-        // Сохраняем изменения в папке
-        String extractedDir = Configutation.workDir + File.separator + net.ptnkjke.utils.Utils.getRandomName();
-        for (ClassGen cg : DataActivity.changes) {
-            String path = cg.getClassName().replace(".", "/") + ".class";
-            File f = new File(extractedDir, path);
-            f.getParentFile().mkdirs();
-
-            try {
-                cg.getJavaClass().dump(f);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        DataActivity.changes.clear();
+        Core.INSTANCE.save();
     }
 
     // Окно с настройками

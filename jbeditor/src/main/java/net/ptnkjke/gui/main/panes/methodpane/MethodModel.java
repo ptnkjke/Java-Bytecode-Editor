@@ -1,6 +1,7 @@
 package net.ptnkjke.gui.main.panes.methodpane;
 
 import net.ptnkjke.gui.main.model.classtree.Method;
+import net.ptnkjke.logic.bcel.BCELCore;
 
 /**
  * Представление
@@ -10,10 +11,6 @@ public class MethodModel {
      * Байт-код для BCEL
      */
     private String codeBCEL;
-    /**
-     * Сведения о BCEL-методе
-     */
-    private Method methodBCEL;
     /**
      * Байт-код для ASM
      */
@@ -26,7 +23,19 @@ public class MethodModel {
      * Порядковый нмоер метода
      */
     private int methodIndex;
+    /**
+     * ClassName in format: net.ptnkjke.class
+     */
+    private String className;
 
+
+    public MethodModel(String className, int methodIndex) {
+        this.className = className;
+        this.methodIndex = methodIndex;
+
+        this.codeBCEL = BCELCore.getMethodsCode(className, methodIndex);
+        this.graphPath = BCELCore.getGraphVizFile(className, methodIndex);
+    }
 
     public String getCodeBCEL() {
         return codeBCEL;
@@ -34,14 +43,6 @@ public class MethodModel {
 
     public void setCodeBCEL(String codeBCEL) {
         this.codeBCEL = codeBCEL;
-    }
-
-    public Method getMethodBCEL() {
-        return methodBCEL;
-    }
-
-    public void setMethodBCEL(Method methodBCEL) {
-        this.methodBCEL = methodBCEL;
     }
 
     public String getCodeASM() {
@@ -66,5 +67,13 @@ public class MethodModel {
 
     public void setMethodIndex(int methodIndex) {
         this.methodIndex = methodIndex;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }
