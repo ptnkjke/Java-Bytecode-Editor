@@ -1,7 +1,6 @@
-package net.ptnkjke.utils;
+package net.ptnkjke.logic.bcel.bytecode;
 
 import net.ptnkjke.gui.main.constantpanes.table.ConstantTableCell;
-import net.ptnkjke.utils.ConstanstWorker;
 import org.apache.bcel.classfile.*;
 
 /**

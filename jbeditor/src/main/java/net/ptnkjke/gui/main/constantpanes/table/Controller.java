@@ -7,7 +7,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import net.ptnkjke.logic.Core;
-import net.ptnkjke.utils.CellConstantWorker;
+import net.ptnkjke.logic.bcel.bytecode.CellConstantWorker;
 import org.apache.bcel.Constants;
 import org.apache.bcel.classfile.Constant;
 import org.apache.bcel.classfile.Method;

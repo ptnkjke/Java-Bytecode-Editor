@@ -1,6 +1,5 @@
-package net.ptnkjke.utils;
+package net.ptnkjke.logic.bcel.bytecode;
 
-import net.ptnkjke.gui.main.model.classtree.Constant;
 import org.apache.bcel.Constants;
 import org.apache.bcel.generic.*;
 

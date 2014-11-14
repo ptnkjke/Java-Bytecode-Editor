@@ -1,19 +1,17 @@
-package net.ptnkjke.utils;
+package net.ptnkjke.logic.bcel;
 
 import net.ptnkjke.Configutation;
 import net.ptnkjke.gui.main.model.ConsoleMessage;
 import net.ptnkjke.gui.main.model.MessageType;
+import net.ptnkjke.logic.bcel.bytecode.InstructionHandleWorker;
+import net.ptnkjke.utils.Utils;
 import org.apache.bcel.classfile.Constant;
-import org.apache.bcel.classfile.ConstantUtf8;
 import org.apache.bcel.generic.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by Lopatin on 05.07.2014.

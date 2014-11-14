@@ -1,4 +1,4 @@
-package net.ptnkjke.utils;
+package net.ptnkjke.logic.bcel.bytecode;
 
 import net.MissingInstruction;
 import org.apache.bcel.Constants;
