@@ -191,15 +191,14 @@ public class Controller {
         TreeItem<Info> rootNode = Info.createInfo(file.getName(), Root.class);
         mainTree.setRoot(rootNode);
 
+        Core.INSTANCE.read(file.getAbsolutePath());
+
         if (file.getName().contains(".jar")) {
             openJarFile(file);
         } else {
             classFile = true;
             openClassFile(file);
         }
-
-        Core.INSTANCE.read(file.getAbsolutePath());
-
     }
 
     private void openJarFile(File file) {
@@ -208,7 +207,7 @@ public class Controller {
 
         JarInputStream jarInputStream = null;
 
-        try {
+        try{
             jarInputStream = new JarInputStream(new FileInputStream(file));
         } catch (IOException e) {
             ConsoleMessage consoleMessage = new ConsoleMessage(

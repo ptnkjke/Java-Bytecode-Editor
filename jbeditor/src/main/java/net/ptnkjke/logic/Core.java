@@ -1,12 +1,15 @@
 package net.ptnkjke.logic;
 
 import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.io.ZipInputStream;
+import net.lingala.zip4j.model.FileHeader;
 import net.lingala.zip4j.model.ZipParameters;
 import net.ptnkjke.Configutation;
 import net.ptnkjke.utils.Utils;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
@@ -59,27 +62,33 @@ public class Core {
      * Read .jar file
      */
     private void readJar(File jarFile) {
-        JarInputStream jarInputStream = null;
-
+        ZipFile zipFile = null;
         try {
-            jarInputStream = new JarInputStream(new FileInputStream(jarFile));
-        } catch (IOException e) {
+            zipFile = new ZipFile(jarFile);
+        } catch (ZipException e) {
             e.printStackTrace();
         }
 
+        List<FileHeader> fileHeaderList = null;
         try {
-            ZipEntry next = jarInputStream.getNextEntry();
-
-            while (next != null) {
-                if (next.getName().contains(".class")) {
-                    JavaClass javaClass = new ClassParser(jarFile.getAbsolutePath(), next.getName()).parse();
-                    classMap.put(next.getName().replace("/", ".").replace(".class", ""), javaClass.getBytes());
-                }
-
-                next = jarInputStream.getNextEntry();
-            }
-        } catch (IOException e) {
+            fileHeaderList = zipFile.getFileHeaders();
+        } catch (ZipException e) {
             e.printStackTrace();
+        }
+        for (FileHeader fh : fileHeaderList) {
+            String fileName = fh.getFileName();
+
+            if (fileName.contains(".class")) {
+                JavaClass javaClass = null;
+                try {
+                    javaClass = new ClassParser(zipFile.getInputStream(fh), fileName).parse();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ZipException e) {
+                    e.printStackTrace();
+                }
+                classMap.put(fileName.replace("/", ".").replace(".class", ""), javaClass.getBytes());
+            }
         }
 
         try {
@@ -140,7 +149,7 @@ public class Core {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 outputStream.close();
             } catch (IOException e) {
@@ -184,14 +193,14 @@ public class Core {
                 }
             }
         }
-        File [] allPackages = workDir.listFiles(new FilenameFilter() {
+        File[] allPackages = workDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 return new File(dir, name).isDirectory();
             }
         });
 
-        File [] allFiles = workDir.listFiles(new FilenameFilter() {
+        File[] allFiles = workDir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 return new File(dir, name).isFile();
@@ -206,7 +215,7 @@ public class Core {
             }
         }
 
-        for(File f : allFiles){
+        for (File f : allFiles) {
             try {
                 zipFile.addFile(f, new ZipParameters());
             } catch (ZipException e) {
