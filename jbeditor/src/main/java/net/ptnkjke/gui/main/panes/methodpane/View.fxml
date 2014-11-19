@@ -29,10 +29,10 @@
           </Tab>
             <Tab text="Code[ASM]">
                <content>
-                  <VBox prefHeight="76.0" prefWidth="128.0">
+                  <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
-                        <TextArea fx:id="codeAsm" prefHeight="200.0" prefWidth="200.0" />
-                        <Button mnemonicParsing="false" text="Button" />
+                        <TextArea fx:id="codeAsm" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                        <Button disable="true" mnemonicParsing="false" text="accept" />
                      </children>
                   </VBox>
                </content>

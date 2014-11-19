@@ -1,6 +1,7 @@
 package net.ptnkjke.gui.main.panes.methodpane;
 
 import net.ptnkjke.gui.main.model.classtree.Method;
+import net.ptnkjke.logic.asm.ASMCore;
 import net.ptnkjke.logic.bcel.BCELCore;
 
 /**
@@ -34,6 +35,7 @@ public class MethodModel {
         this.methodIndex = methodIndex;
 
         this.codeBCEL = BCELCore.getMethodsCode(className, methodIndex);
+        this.codeASM = ASMCore.getMethodsCode(className, methodIndex);
         this.graphPath = BCELCore.getGraphVizFile(className, methodIndex);
     }
 

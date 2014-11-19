@@ -74,6 +74,9 @@ public class Controller {
             }
 
             ctb = cellConstantWorker.getConstantTableCell();
+            if(ctb == null){
+                continue;
+            }
             ctb.setConst_type(constant.getTag());
             ctb.setId(i);
             table.getItems().add(ctb);

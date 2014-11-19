@@ -50,7 +50,11 @@ public abstract class ConstanstWorker {
                 visitMethodType((ConstantMethodType) constant);
                 break;
             default:
-                throw new Exception("");
+                try {
+                    throw new Exception("");
+                }catch (Exception e){
+                    e.toString();
+                }
         }
     }
 

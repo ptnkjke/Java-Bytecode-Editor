@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * Created by Lopatin on 06.07.2014.
  */
-public class JByteParser {
+public class JBcelByteParser {
     private InstructionList instructions = new InstructionList();
     private ArrayList<InstructionHandle> instructionHandleList = new ArrayList<InstructionHandle>();
     private ArrayList<BranchStruct> branchStructs = new ArrayList<>();
