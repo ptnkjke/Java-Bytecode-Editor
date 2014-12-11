@@ -8,12 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
-import net.ptnkjke.logic.Core;
-import net.ptnkjke.logic.asm.bytecode.BCClassVisitor;
-import net.ptnkjke.logic.asm.bytecode.BCMethodVisitor;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
+import net.ptnkjke.logic.own.OClass;
+import org.jcp.xml.dsig.internal.dom.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -100,6 +96,24 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
+
+
+/*
+         OClass oClass = new OClass();
+         try {
+         oClass.readFromBytes(Utils.readBytesFromStream(new FileInputStream(new File("D:\\working\\te\\Allatori-5.1-Demo\\lib\\allatori\\com\\allatori\\iIIiIiIIii.class"))));
+         } catch (Exception e) {
+         e.printStackTrace();
+         }
+        System.out.println(net.ptnkjke.logic.own.ConstantPool.getConstantPoolCode(oClass.getConstantPool()));
+
+         oClass.getConstantPool().debugPrint();
+         try {
+         oClass.dump(new File("D:\\working\\te\\Allatori-5.1-Demo\\lib\\allatori\\com\\allatori\\iIIiIiIIii_dumping.class"));
+         } catch (IOException e) {
+         e.printStackTrace();
+         }*/
+
         //
 
         try {
