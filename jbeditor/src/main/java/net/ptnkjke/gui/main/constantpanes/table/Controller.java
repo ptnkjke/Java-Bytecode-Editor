@@ -8,6 +8,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import net.ptnkjke.logic.Core;
 import net.ptnkjke.logic.bcel.bytecode.CellConstantWorker;
+import net.ptnkjke.logic.own.ConstantPool;
+import net.ptnkjke.logic.own.OClass;
 import org.apache.bcel.Constants;
 import org.apache.bcel.classfile.Constant;
 import org.apache.bcel.classfile.Method;
@@ -27,8 +29,11 @@ import java.util.List;
 public class Controller {
     @FXML
     private TableView<ConstantTableCell> table;
+    @FXML
+    private TextArea cpEditor;
 
     private ClassGen classGen;
+    private OClass oClass;
 
     @FXML
     public void initialize() {
@@ -74,7 +79,7 @@ public class Controller {
             }
 
             ctb = cellConstantWorker.getConstantTableCell();
-            if(ctb == null){
+            if (ctb == null) {
                 continue;
             }
             ctb.setConst_type(constant.getTag());
@@ -100,6 +105,14 @@ public class Controller {
 
             sb.append(textConstantWorker.getText()).append("\n");
         }*/
+
+        oClass = new OClass();
+        try {
+            oClass.readFromBytes(Core.INSTANCE.getClassMap().get(cg.getClassName()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        cpEditor.setText(ConstantPool.getConstantPoolCode(oClass.getConstantPool()));
     }
 
     // Сохранение констант
@@ -188,6 +201,15 @@ public class Controller {
             // Update bytes in Core
             Core.INSTANCE.getClassMap().put(classGen.getClassName(), classGen.getJavaClass().getBytes());
         }
+    }
+
+    // Сохранение констант из текстового редактора
+    public void saveConstantsFromEditor() {
+        String code = cpEditor.getText();
+        oClass.setConstantPool(ConstantPool.parseCode(code));
+
+        // TODO: !!! Update bytes in Core
+        Core.INSTANCE.getClassMap().put(classGen.getClassName(), null);
     }
 
     // Приватный класс для представление в таблице

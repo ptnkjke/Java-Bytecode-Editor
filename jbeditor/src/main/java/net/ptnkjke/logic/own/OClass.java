@@ -53,6 +53,22 @@ public class OClass {
         try {
             f = new DataOutputStream(new FileOutputStream(file));
 
+            f.write(dump());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (f != null) {
+                f.close();
+            }
+        }
+    }
+
+    public byte[] dump() throws IOException {
+        ByteArrayOutputStream s = new ByteArrayOutputStream();
+        DataOutputStream f = null;
+        try {
+            f = new DataOutputStream(s);
+
             f.writeInt(0xcafebabe);
             f.writeShort(minor);
             f.writeShort(major);
@@ -65,6 +81,8 @@ public class OClass {
                 f.close();
             }
         }
+
+        return s.toByteArray();
     }
 
 

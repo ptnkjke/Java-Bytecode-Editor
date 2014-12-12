@@ -8,9 +8,6 @@ import org.apache.bcel.generic.ClassGen;
 
 import java.io.IOException;
 
-/**
- * Created by Lopatin on 09.07.2014.
- */
 public class Static {
     public static TabPane loadView(ClassGen cg) {
 
