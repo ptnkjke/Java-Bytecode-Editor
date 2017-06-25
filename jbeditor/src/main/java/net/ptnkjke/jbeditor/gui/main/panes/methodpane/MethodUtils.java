@@ -20,7 +20,7 @@ public class MethodUtils {
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
 
         try {
-            gridPane = (GridPane) fxmlLoader.load(MethodUtils.class.getResource("/net/ptnkjke/jbeditor/gui/main/panes/methodpane/View.fxml/View.fxml").openStream());
+            gridPane = (GridPane) fxmlLoader.load(MethodUtils.class.getResource("View.fxml").openStream());
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -511,7 +511,7 @@ public class JByteParser {
             case "invokedynamic":
                 n = Integer.parseInt(args[0]);
                 int index = Integer.parseInt(args[1]);
-                instruction = new INVOKEDYNAMIC((short) n, index);
+                instruction = new INVOKEDYNAMIC(/*(short) n,*/ index);
                 break;
             case "invokespecial":
                 n = Integer.parseInt(args[0]);

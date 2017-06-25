@@ -375,7 +375,7 @@ public abstract class InstructionHandleWorker {
         } else if (handle instanceof NEW) {
             visitNEW(instructionHandle);
         } else {
-            throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
+            //TODO: throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
 

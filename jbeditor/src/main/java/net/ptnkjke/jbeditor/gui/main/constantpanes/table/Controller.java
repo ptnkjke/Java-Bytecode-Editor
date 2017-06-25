@@ -166,12 +166,12 @@ public class Controller {
                 case Constants.CONSTANT_NameAndType:
                     // TODO:
                     break;
-                case Constants.CONSTANT_MethodHandle:
+                //case Constants.CONSTANT_MethodHandle:
                     // TODO:
-                    break;
-                case Constants.CONSTANT_MethodType:
+                //    break;
+                //case Constants.CONSTANT_MethodType:
                     // TODO:
-                    break;
+                //    break;
                 default:
                     throw new Exception("");
             }

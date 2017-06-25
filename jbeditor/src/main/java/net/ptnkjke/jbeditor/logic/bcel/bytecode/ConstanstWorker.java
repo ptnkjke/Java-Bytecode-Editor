@@ -43,12 +43,12 @@ public abstract class ConstanstWorker {
             case Constants.CONSTANT_NameAndType:
                 visitNameAndType((ConstantNameAndType) constant);
                 break;
-            case Constants.CONSTANT_MethodHandle:
+/*            case Constants.CONSTANT_MethodHandle:
                 visitMethodHandle((ConstantMethodHandle) constant);
                 break;
             case Constants.CONSTANT_MethodType:
                 visitMethodType((ConstantMethodType) constant);
-                break;
+                break;*/
             default:
                 try {
                     throw new Exception("");

@@ -136,12 +136,12 @@ public class Controller {
                     case Constants.CONSTANT_NameAndType:
                         ConstantNameAndType nameAndType = (ConstantNameAndType) const_bcel;
                         break;
-                    case Constants.CONSTANT_MethodHandle:
+                  /*  case Constants.CONSTANT_MethodHandle:
                         ConstantMethodHandle methodHandle = (ConstantMethodHandle) const_bcel;
                         break;
                     case Constants.CONSTANT_MethodType:
                         ConstantMethodType methodType = (ConstantMethodType) const_bcel;
-                        break;
+                        break;*/
                     default:
                         try {
                             throw new Exception("");
