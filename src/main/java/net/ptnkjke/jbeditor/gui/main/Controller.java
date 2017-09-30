@@ -23,7 +23,7 @@ import net.ptnkjke.jbeditor.gui.main.panes.methodpane.MethodModel;
 import net.ptnkjke.jbeditor.gui.main.panes.methodpane.MethodUtils;
 import net.ptnkjke.jbeditor.gui.main.panes.generalinfopane.Utils;
 import net.ptnkjke.jbeditor.logic.Core;
-import org.apache.bcel.Constants;
+import org.apache.bcel.Const;
 import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.ClassGen;
 
@@ -103,45 +103,45 @@ public class Controller {
                 net.ptnkjke.jbeditor.gui.main.model.classtree.Constant constant = (net.ptnkjke.jbeditor.gui.main.model.classtree.Constant) newValue.getValue();
                 org.apache.bcel.classfile.Constant const_bcel = constant.getConstant();
                 switch (constant.getConstant().getTag()) {
-                    case Constants.CONSTANT_Utf8:
+                    case Const.CONSTANT_Utf8:
                         ConstantUtf8 utf8 = (ConstantUtf8) const_bcel;
                         break;
-                    case Constants.CONSTANT_Integer:
+                    case Const.CONSTANT_Integer:
                         ConstantInteger integer = (ConstantInteger) const_bcel;
                         break;
-                    case Constants.CONSTANT_Float:
+                    case Const.CONSTANT_Float:
                         ConstantFloat constantFloat = (ConstantFloat) const_bcel;
                         break;
-                    case Constants.CONSTANT_Long:
+                    case Const.CONSTANT_Long:
                         ConstantLong constantLong = (ConstantLong) const_bcel;
                         break;
-                    case Constants.CONSTANT_Double:
+                    case Const.CONSTANT_Double:
                         ConstantDouble constantDouble = (ConstantDouble) const_bcel;
                         break;
-                    case Constants.CONSTANT_Class:
+                    case Const.CONSTANT_Class:
                         ConstantClass constantClass = (ConstantClass) const_bcel;
                         break;
-                    case Constants.CONSTANT_Fieldref:
+                    case Const.CONSTANT_Fieldref:
                         ConstantFieldref fieldref = (ConstantFieldref) const_bcel;
                         break;
-                    case Constants.CONSTANT_String:
+                    case Const.CONSTANT_String:
                         ConstantString string = (ConstantString) const_bcel;
                         break;
-                    case Constants.CONSTANT_Methodref:
+                    case Const.CONSTANT_Methodref:
                         ConstantMethodref methodref = (ConstantMethodref) const_bcel;
                         break;
-                    case Constants.CONSTANT_InterfaceMethodref:
+                    case Const.CONSTANT_InterfaceMethodref:
                         ConstantInterfaceMethodref interfaceMethodref = (ConstantInterfaceMethodref) const_bcel;
                         break;
-                    case Constants.CONSTANT_NameAndType:
+                    case Const.CONSTANT_NameAndType:
                         ConstantNameAndType nameAndType = (ConstantNameAndType) const_bcel;
                         break;
-                  /*  case Constants.CONSTANT_MethodHandle:
+                    case Const.CONSTANT_MethodHandle:
                         ConstantMethodHandle methodHandle = (ConstantMethodHandle) const_bcel;
                         break;
-                    case Constants.CONSTANT_MethodType:
+                    case Const.CONSTANT_MethodType:
                         ConstantMethodType methodType = (ConstantMethodType) const_bcel;
-                        break;*/
+                        break;
                     default:
                         try {
                             throw new Exception("");

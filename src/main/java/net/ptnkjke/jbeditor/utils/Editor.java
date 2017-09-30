@@ -1,21 +1,19 @@
 package net.ptnkjke.jbeditor.utils;
 
-import org.apache.bcel.Constants;
+import org.apache.bcel.Const;
 import org.apache.bcel.generic.*;
 
-/**
- * Created by Lopatin on 06.07.2014.
- */
+
 public class Editor extends InstructionHandleWorker {
     private String result;
 
     private void base(InstructionHandle handle) {
-        result = Constants.OPCODE_NAMES[handle.getInstruction().getOpcode()] + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(handle.getInstruction().getOpcode()) + "      // [" + handle.getPosition() + "]";
     }
 
     private void branch(InstructionHandle handle) {
         BranchInstruction branchInstruction = (BranchInstruction) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[handle.getInstruction().getOpcode()]
+        result = Const.getOpcodeName(handle.getInstruction().getOpcode())
                 + " "
                 + branchInstruction.getTarget().getPosition()
                 + "      // [" + handle.getPosition() + "]";
@@ -398,7 +396,7 @@ public class Editor extends InstructionHandleWorker {
         Instruction instruction = instructionHandle.getInstruction();
 
         StringBuilder temp = new StringBuilder();
-        temp.append(Constants.OPCODE_NAMES[instruction.getOpcode()]);
+        temp.append(Const.getOpcodeName(instruction.getOpcode()));
 
         LOOKUPSWITCH lookupswitch = (LOOKUPSWITCH) instruction;
         InstructionHandle[] targets = lookupswitch.getTargets();
@@ -421,7 +419,7 @@ public class Editor extends InstructionHandleWorker {
         Instruction instruction = instructionHandle.getInstruction();
 
         StringBuilder temp = new StringBuilder();
-        temp.append(Constants.OPCODE_NAMES[instruction.getOpcode()]);
+        temp.append(Const.getOpcodeName(instruction.getOpcode()));
 
 
         TABLESWITCH tableswitch = (TABLESWITCH) instruction;
@@ -526,97 +524,97 @@ public class Editor extends InstructionHandleWorker {
     @Override
     public void visitANEWARRAY(InstructionHandle handle) {
         ANEWARRAY instruction = (ANEWARRAY) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitCHECKCAST(InstructionHandle handle) {
         CHECKCAST instruction = (CHECKCAST) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINSTANCEOF(InstructionHandle handle) {
         INSTANCEOF instruction = (INSTANCEOF) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitLDC(InstructionHandle handle) {
         LDC instruction = (LDC) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitLDC2_W(InstructionHandle handle) {
         LDC2_W instruction = (LDC2_W) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitMULTIANEWARRAY(InstructionHandle handle) {
         MULTIANEWARRAY instruction = (MULTIANEWARRAY) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + instruction.getDimensions() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + instruction.getDimensions() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitGETFIELD(InstructionHandle handle) {
         GETFIELD instruction = (GETFIELD) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitGETSTATIC(InstructionHandle handle) {
         GETSTATIC instruction = (GETSTATIC) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINVOKEINTERFACE(InstructionHandle handle) {
         INVOKEINTERFACE instruction = (INVOKEINTERFACE) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + " " + instruction.getCount() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + " " + instruction.getCount() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINVOKESPECIAL(InstructionHandle handle) {
         INVOKESPECIAL instruction = (INVOKESPECIAL) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINVOKESTATIC(InstructionHandle handle) {
         INVOKESTATIC instruction = (INVOKESTATIC) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINVOKEVIRTUAL(InstructionHandle handle) {
         INVOKEVIRTUAL instruction = (INVOKEVIRTUAL) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitPUTFIELD(InstructionHandle handle) {
         PUTFIELD instruction = (PUTFIELD) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitPUTSTATIC(InstructionHandle handle) {
         PUTSTATIC instruction = (PUTSTATIC) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitINVOKEDYNAMIC(InstructionHandle handle) {
         INVOKEDYNAMIC instruction = (INVOKEDYNAMIC) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
     public void visitNEW(InstructionHandle handle) {
         NEW instruction = (NEW) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(instruction.getOpcode()) + " " + instruction.getIndex() + "      // [" + handle.getPosition() + "]";
     }
 
 
@@ -625,10 +623,10 @@ public class Editor extends InstructionHandleWorker {
         ALOAD instruction = (ALOAD) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.ALOAD) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.ALOAD) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
@@ -637,10 +635,10 @@ public class Editor extends InstructionHandleWorker {
         DLOAD instruction = (DLOAD) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.DLOAD) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.DLOAD) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
@@ -649,10 +647,10 @@ public class Editor extends InstructionHandleWorker {
         FLOAD instruction = (FLOAD) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.FLOAD) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.FLOAD) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
@@ -661,10 +659,10 @@ public class Editor extends InstructionHandleWorker {
         LLOAD instruction = (LLOAD) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.LLOAD) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.LLOAD) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
@@ -673,10 +671,10 @@ public class Editor extends InstructionHandleWorker {
         ILOAD instruction = (ILOAD) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.ILOAD) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.ILOAD) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
@@ -685,10 +683,10 @@ public class Editor extends InstructionHandleWorker {
         ASTORE instruction = (ASTORE) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.ASTORE) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.ASTORE) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
@@ -697,10 +695,10 @@ public class Editor extends InstructionHandleWorker {
         DSTORE instruction = (DSTORE) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.DSTORE) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.DSTORE) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
@@ -709,10 +707,10 @@ public class Editor extends InstructionHandleWorker {
         FSTORE instruction = (FSTORE) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.FSTORE) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.FSTORE) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
@@ -721,10 +719,10 @@ public class Editor extends InstructionHandleWorker {
         ISTORE instruction = (ISTORE) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.ISTORE) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.ISTORE) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
@@ -733,17 +731,17 @@ public class Editor extends InstructionHandleWorker {
         LSTORE instruction = (LSTORE) handle.getInstruction();
         int index = instruction.getIndex();
 
-        if (instruction.getOpcode() == Constants.LSTORE) {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + " " + index + "      // [" + handle.getPosition() + "]";
+        if (instruction.getOpcode() == Const.LSTORE) {
+            result = Const.getOpcodeName(instruction.getOpcode()) + " " + index + "      // [" + handle.getPosition() + "]";
         } else {
-            result = Constants.OPCODE_NAMES[instruction.getOpcode()] + "      // [" + handle.getPosition() + "]";
+            result = Const.getOpcodeName(instruction.getOpcode()) + "      // [" + handle.getPosition() + "]";
         }
     }
 
     @Override
     public void visitIINC(InstructionHandle handle) {
         IINC iinc = (IINC) handle.getInstruction();
-        result = Constants.OPCODE_NAMES[iinc.getOpcode()] + " " + iinc.getIndex() + " " + iinc.getIncrement() + "      // [" + handle.getPosition() + "]";
+        result = Const.getOpcodeName(iinc.getOpcode()) + " " + iinc.getIndex() + " " + iinc.getIncrement() + "      // [" + handle.getPosition() + "]";
     }
 
     @Override
@@ -904,7 +902,7 @@ public class Editor extends InstructionHandleWorker {
     @Override
     public void visitNEWARRAY(InstructionHandle instructionHandle) {
         NEWARRAY newarray = (NEWARRAY) instructionHandle.getInstruction();
-        result = Constants.OPCODE_NAMES[newarray.getOpcode()] + " " + newarray.getTypecode() + "      // [" + instructionHandle.getPosition() + "]";
+        result = Const.getOpcodeName(newarray.getOpcode()) + " " + newarray.getTypecode() + "      // [" + instructionHandle.getPosition() + "]";
     }
 
     @Override
@@ -915,18 +913,18 @@ public class Editor extends InstructionHandleWorker {
     @Override
     public void visitRET(InstructionHandle instructionHandle) {
         RET ret = (RET) instructionHandle.getInstruction();
-        result = Constants.OPCODE_NAMES[ret.getOpcode()] + " " + ret.getIndex() + "      // [" + instructionHandle.getPosition() + "]";
+        result = Const.getOpcodeName(ret.getOpcode()) + " " + ret.getIndex() + "      // [" + instructionHandle.getPosition() + "]";
     }
 
     @Override
     public void visitSIPUSH(InstructionHandle instructionHandle) {
         SIPUSH sipush = (SIPUSH) instructionHandle.getInstruction();
-        result = Constants.OPCODE_NAMES[sipush.getOpcode()] + " " + sipush.getValue() + "      // [" + instructionHandle.getPosition() + "]";
+        result = Const.getOpcodeName(sipush.getOpcode()) + " " + sipush.getValue() + "      // [" + instructionHandle.getPosition() + "]";
     }
 
     @Override
     public void visitBIPUSH(InstructionHandle instructionHandle) {
         BIPUSH bipush = (BIPUSH) instructionHandle.getInstruction();
-        result = Constants.OPCODE_NAMES[bipush.getOpcode()] + " " + bipush.getValue() + "      // [" + instructionHandle.getPosition() + "]";
+        result = Const.getOpcodeName(bipush.getOpcode()) + " " + bipush.getValue() + "      // [" + instructionHandle.getPosition() + "]";
     }
 }

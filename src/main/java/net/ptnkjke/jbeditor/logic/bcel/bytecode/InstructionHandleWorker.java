@@ -1,12 +1,9 @@
 package net.ptnkjke.jbeditor.logic.bcel.bytecode;
 
 import net.ptnkjke.jbeditor.MissingInstruction;
-import org.apache.bcel.Constants;
+import org.apache.bcel.Const;
 import org.apache.bcel.generic.*;
 
-/**
- * Created by Lopatin on 05.07.2014.
- */
 public abstract class InstructionHandleWorker {
 
     public void visit(InstructionHandle handle) throws Exception {
@@ -204,52 +201,52 @@ public abstract class InstructionHandleWorker {
             }
         } else if (handle instanceof IfInstruction) {
             switch (handle.getOpcode()) {
-                case Constants.IF_ACMPEQ:
+                case Const.IF_ACMPEQ:
                     visitIF_ACMPEQ(instructionHandle);
                     break;
-                case Constants.IF_ACMPNE:
+                case Const.IF_ACMPNE:
                     visitIF_ACMPNE(instructionHandle);
                     break;
-                case Constants.IF_ICMPEQ:
+                case Const.IF_ICMPEQ:
                     visitIF_ICMPEQ(instructionHandle);
                     break;
-                case Constants.IF_ICMPGT:
+                case Const.IF_ICMPGT:
                     visitIF_ICMPGT(instructionHandle);
                     break;
-                case Constants.IF_ICMPGE:
+                case Const.IF_ICMPGE:
                     visitIF_ICMPGE(instructionHandle);
                     break;
-                case Constants.IF_ICMPLE:
+                case Const.IF_ICMPLE:
                     visitIF_ICMPLE(instructionHandle);
                     break;
-                case Constants.IF_ICMPLT:
+                case Const.IF_ICMPLT:
                     visitIF_ICMPLT(instructionHandle);
                     break;
-                case Constants.IF_ICMPNE:
+                case Const.IF_ICMPNE:
                     visitIF_ICMPNE(instructionHandle);
                     break;
-                case Constants.IFEQ:
+                case Const.IFEQ:
                     visitIFEQ(instructionHandle);
                     break;
-                case Constants.IFGE:
+                case Const.IFGE:
                     visitIFGE(instructionHandle);
                     break;
-                case Constants.IFGT:
+                case Const.IFGT:
                     visitIFGT(instructionHandle);
                     break;
-                case Constants.IFLE:
+                case Const.IFLE:
                     visitIFLE(instructionHandle);
                     break;
-                case Constants.IFLT:
+                case Const.IFLT:
                     visitIFLT(instructionHandle);
                     break;
-                case Constants.IFNE:
+                case Const.IFNE:
                     visitIFNE(instructionHandle);
                     break;
-                case Constants.IFNONNULL:
+                case Const.IFNONNULL:
                     visitIFNONNULL(instructionHandle);
                     break;
-                case Constants.IFNULL:
+                case Const.IFNULL:
                     visitIFNULL(instructionHandle);
                     break;
                 default:
@@ -275,49 +272,49 @@ public abstract class InstructionHandleWorker {
     private void visitConversionInstruction(InstructionHandle instructionHandle) throws Exception {
         Instruction handle = instructionHandle.getInstruction();
         switch (handle.getOpcode()) {
-            case Constants.D2F:
+            case Const.D2F:
                 visitD2F(instructionHandle);
                 break;
-            case Constants.D2I:
+            case Const.D2I:
                 visitD2I(instructionHandle);
                 break;
-            case Constants.D2L:
+            case Const.D2L:
                 visitD2L(instructionHandle);
                 break;
-            case Constants.F2D:
+            case Const.F2D:
                 visitF2D(instructionHandle);
                 break;
-            case Constants.F2I:
+            case Const.F2I:
                 visitF2I(instructionHandle);
                 break;
-            case Constants.F2L:
+            case Const.F2L:
                 visitF2L(instructionHandle);
                 break;
-            case Constants.I2B:
+            case Const.I2B:
                 visitI2B(instructionHandle);
                 break;
-            case Constants.I2C:
+            case Const.I2C:
                 visitI2C(instructionHandle);
                 break;
-            case Constants.I2D:
+            case Const.I2D:
                 visitI2D(instructionHandle);
                 break;
-            case Constants.I2F:
+            case Const.I2F:
                 visitI2F(instructionHandle);
                 break;
-            case Constants.I2L:
+            case Const.I2L:
                 visitI2L(instructionHandle);
                 break;
-            case Constants.I2S:
+            case Const.I2S:
                 visitI2S(instructionHandle);
                 break;
-            case Constants.L2D:
+            case Const.L2D:
                 visitL2D(instructionHandle);
                 break;
-            case Constants.L2F:
+            case Const.L2F:
                 visitL2F(instructionHandle);
                 break;
-            case Constants.L2I:
+            case Const.L2I:
                 visitL2I(instructionHandle);
                 break;
             default:
@@ -339,43 +336,40 @@ public abstract class InstructionHandleWorker {
             visitLDC2_W(instructionHandle);
         } else if (handle instanceof MULTIANEWARRAY) {
             visitMULTIANEWARRAY(instructionHandle);
-        } else if (handle instanceof NameSignatureInstruction) {
-
+        } else if (handle instanceof NEW) {
+            visitNEW(instructionHandle);
+        } else {
             switch (handle.getOpcode()) {
-                case Constants.GETFIELD:
+                case Const.GETFIELD:
                     visitGETFIELD(instructionHandle);
                     break;
-                case Constants.GETSTATIC:
+                case Const.GETSTATIC:
                     visitGETSTATIC(instructionHandle);
                     break;
-                case Constants.INVOKEINTERFACE:
+                case Const.INVOKEINTERFACE:
                     visitINVOKEINTERFACE(instructionHandle);
                     break;
-                case Constants.INVOKESPECIAL:
+                case Const.INVOKESPECIAL:
                     visitINVOKESPECIAL(instructionHandle);
                     break;
-                case Constants.INVOKESTATIC:
+                case Const.INVOKESTATIC:
                     visitINVOKESTATIC(instructionHandle);
                     break;
-                case Constants.INVOKEVIRTUAL:
+                case Const.INVOKEVIRTUAL:
                     visitINVOKEVIRTUAL(instructionHandle);
                     break;
-                case Constants.PUTFIELD:
+                case Const.PUTFIELD:
                     visitPUTFIELD(instructionHandle);
                     break;
-                case Constants.PUTSTATIC:
+                case Const.PUTSTATIC:
                     visitPUTSTATIC(instructionHandle);
                     break;
-                case Constants.INVOKEDYNAMIC:
+                case Const.INVOKEDYNAMIC:
                     visitINVOKEDYNAMIC(instructionHandle);
                     break;
                 default:
                     throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
             }
-        } else if (handle instanceof NEW) {
-            visitNEW(instructionHandle);
-        } else {
-            //TODO: throw new MissingInstruction("i dont know #opcode " + handle.getOpcode());
         }
     }
 
@@ -383,39 +377,39 @@ public abstract class InstructionHandleWorker {
         Instruction handle = instructionHandle.getInstruction();
         if (handle instanceof LoadInstruction) {
             switch (handle.getOpcode()) {
-                case Constants.ALOAD:
-                case Constants.ALOAD_0:
-                case Constants.ALOAD_1:
-                case Constants.ALOAD_2:
-                case Constants.ALOAD_3:
+                case Const.ALOAD:
+                case Const.ALOAD_0:
+                case Const.ALOAD_1:
+                case Const.ALOAD_2:
+                case Const.ALOAD_3:
                     visitALOAD(instructionHandle);
                     break;
-                case Constants.DLOAD:
-                case Constants.DLOAD_0:
-                case Constants.DLOAD_1:
-                case Constants.DLOAD_2:
-                case Constants.DLOAD_3:
+                case Const.DLOAD:
+                case Const.DLOAD_0:
+                case Const.DLOAD_1:
+                case Const.DLOAD_2:
+                case Const.DLOAD_3:
                     visitDLOAD(instructionHandle);
                     break;
-                case Constants.FLOAD:
-                case Constants.FLOAD_0:
-                case Constants.FLOAD_1:
-                case Constants.FLOAD_2:
-                case Constants.FLOAD_3:
+                case Const.FLOAD:
+                case Const.FLOAD_0:
+                case Const.FLOAD_1:
+                case Const.FLOAD_2:
+                case Const.FLOAD_3:
                     visitFLOAD(instructionHandle);
                     break;
-                case Constants.ILOAD:
-                case Constants.ILOAD_0:
-                case Constants.ILOAD_1:
-                case Constants.ILOAD_2:
-                case Constants.ILOAD_3:
+                case Const.ILOAD:
+                case Const.ILOAD_0:
+                case Const.ILOAD_1:
+                case Const.ILOAD_2:
+                case Const.ILOAD_3:
                     visitILOAD(instructionHandle);
                     break;
-                case Constants.LLOAD:
-                case Constants.LLOAD_0:
-                case Constants.LLOAD_1:
-                case Constants.LLOAD_2:
-                case Constants.LLOAD_3:
+                case Const.LLOAD:
+                case Const.LLOAD_0:
+                case Const.LLOAD_1:
+                case Const.LLOAD_2:
+                case Const.LLOAD_3:
                     visitLLOAD(instructionHandle);
                     break;
                 default:
@@ -423,39 +417,39 @@ public abstract class InstructionHandleWorker {
             }
         } else if (handle instanceof StoreInstruction) {
             switch (handle.getOpcode()) {
-                case Constants.ASTORE:
-                case Constants.ASTORE_0:
-                case Constants.ASTORE_1:
-                case Constants.ASTORE_2:
-                case Constants.ASTORE_3:
+                case Const.ASTORE:
+                case Const.ASTORE_0:
+                case Const.ASTORE_1:
+                case Const.ASTORE_2:
+                case Const.ASTORE_3:
                     visitASTORE(instructionHandle);
                     break;
-                case Constants.DSTORE:
-                case Constants.DSTORE_0:
-                case Constants.DSTORE_1:
-                case Constants.DSTORE_2:
-                case Constants.DSTORE_3:
+                case Const.DSTORE:
+                case Const.DSTORE_0:
+                case Const.DSTORE_1:
+                case Const.DSTORE_2:
+                case Const.DSTORE_3:
                     visitDSTORE(instructionHandle);
                     break;
-                case Constants.FSTORE:
-                case Constants.FSTORE_0:
-                case Constants.FSTORE_1:
-                case Constants.FSTORE_2:
-                case Constants.FSTORE_3:
+                case Const.FSTORE:
+                case Const.FSTORE_0:
+                case Const.FSTORE_1:
+                case Const.FSTORE_2:
+                case Const.FSTORE_3:
                     visitFSTORE(instructionHandle);
                     break;
-                case Constants.ISTORE:
-                case Constants.ISTORE_0:
-                case Constants.ISTORE_1:
-                case Constants.ISTORE_2:
-                case Constants.ISTORE_3:
+                case Const.ISTORE:
+                case Const.ISTORE_0:
+                case Const.ISTORE_1:
+                case Const.ISTORE_2:
+                case Const.ISTORE_3:
                     visitISTORE(instructionHandle);
                     break;
-                case Constants.LSTORE:
-                case Constants.LSTORE_0:
-                case Constants.LSTORE_1:
-                case Constants.LSTORE_2:
-                case Constants.LSTORE_3:
+                case Const.LSTORE:
+                case Const.LSTORE_0:
+                case Const.LSTORE_1:
+                case Const.LSTORE_2:
+                case Const.LSTORE_3:
                     visitLSTORE(instructionHandle);
                     break;
                 default:

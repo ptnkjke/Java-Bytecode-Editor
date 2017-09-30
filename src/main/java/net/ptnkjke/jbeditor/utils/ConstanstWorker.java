@@ -1,55 +1,51 @@
 package net.ptnkjke.jbeditor.utils;
 
-import org.apache.bcel.Constants;
+import org.apache.bcel.Const;
 import org.apache.bcel.classfile.*;
 
-/**
- * Created by Lopatin on 09.07.2014.
- */
 public abstract class ConstanstWorker {
 
     public void visit(Constant constant) throws Exception {
         switch (constant.getTag()) {
-            case Constants.CONSTANT_Utf8:
+            case Const.CONSTANT_Utf8:
                 visitUtf8((ConstantUtf8) constant);
                 break;
-            case Constants.CONSTANT_Integer:
+            case Const.CONSTANT_Integer:
                 visitInteger((ConstantInteger) constant);
                 break;
-            case Constants.CONSTANT_Float:
+            case Const.CONSTANT_Float:
                 visitFloat((ConstantFloat) constant);
                 break;
-            case Constants.CONSTANT_Long:
+            case Const.CONSTANT_Long:
                 visitLong((ConstantLong) constant);
                 break;
-            case Constants.CONSTANT_Double:
+            case Const.CONSTANT_Double:
                 visitDouble((ConstantDouble) constant);
                 break;
-            case Constants.CONSTANT_Class:
+            case Const.CONSTANT_Class:
                 visitClass((ConstantClass) constant);
                 break;
-            case Constants.CONSTANT_Fieldref:
+            case Const.CONSTANT_Fieldref:
                 visitFieldRef((ConstantFieldref) constant);
                 break;
-            case Constants.CONSTANT_String:
+            case Const.CONSTANT_String:
                 visitString((ConstantString) constant);
                 break;
-            case Constants.CONSTANT_Methodref:
+            case Const.CONSTANT_Methodref:
                 visitMethodref((ConstantMethodref) constant);
                 break;
-            case Constants.CONSTANT_InterfaceMethodref:
+            case Const.CONSTANT_InterfaceMethodref:
                 visitInterfaceMethodRef((ConstantInterfaceMethodref) constant);
                 break;
-            case Constants.CONSTANT_NameAndType:
+            case Const.CONSTANT_NameAndType:
                 visitNameAndType((ConstantNameAndType) constant);
                 break;
-/*            case Constants.CONSTANT_MethodHandle:
+            case Const.CONSTANT_MethodHandle:
                 visitMethodHandle((ConstantMethodHandle) constant);
                 break;
-            case Constants.CONSTANT_MethodType:
+            case Const.CONSTANT_MethodType:
                 visitMethodType((ConstantMethodType) constant);
                 break;
-                */
             default:
                 throw new Exception("");
         }

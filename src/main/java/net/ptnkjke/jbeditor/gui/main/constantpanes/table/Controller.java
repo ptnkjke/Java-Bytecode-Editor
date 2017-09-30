@@ -10,7 +10,7 @@ import net.ptnkjke.jbeditor.logic.Core;
 import net.ptnkjke.jbeditor.logic.bcel.bytecode.CellConstantWorker;
 import net.ptnkjke.jbeditor.logic.own.bytecode.ConstantPool;
 import net.ptnkjke.jbeditor.logic.own.bytecode.OClass;
-import org.apache.bcel.Constants;
+import org.apache.bcel.Const;
 import org.apache.bcel.classfile.Constant;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.*;
@@ -133,43 +133,43 @@ public class Controller {
 
             // Получаем новый id-шник
             switch (cell.getConst_type()) {
-                case Constants.CONSTANT_Utf8:
+                case Const.CONSTANT_Utf8:
                     new_id = constantPoolGen.addUtf8(cell.getValue());
                     break;
-                case Constants.CONSTANT_Integer:
+                case Const.CONSTANT_Integer:
                     new_id = constantPoolGen.addInteger(Integer.parseInt(cell.getValue()));
                     break;
-                case Constants.CONSTANT_Float:
+                case Const.CONSTANT_Float:
                     new_id = constantPoolGen.addFloat(Float.parseFloat(cell.getValue()));
                     break;
-                case Constants.CONSTANT_Long:
+                case Const.CONSTANT_Long:
                     new_id = constantPoolGen.addLong(Integer.parseInt(cell.getValue()));
                     break;
-                case Constants.CONSTANT_Double:
+                case Const.CONSTANT_Double:
                     new_id = constantPoolGen.addDouble(Double.parseDouble(cell.getValue()));
                     break;
-                case Constants.CONSTANT_Class:
+                case Const.CONSTANT_Class:
                     // TODO:
                     break;
-                case Constants.CONSTANT_Fieldref:
+                case Const.CONSTANT_Fieldref:
                     // TODO:
                     break;
-                case Constants.CONSTANT_String:
+                case Const.CONSTANT_String:
                     new_id = constantPoolGen.addString(cell.getValue());
                     break;
-                case Constants.CONSTANT_Methodref:
+                case Const.CONSTANT_Methodref:
                     // TODO:
                     break;
-                case Constants.CONSTANT_InterfaceMethodref:
+                case Const.CONSTANT_InterfaceMethodref:
                     // TODO:
                     break;
-                case Constants.CONSTANT_NameAndType:
+                case Const.CONSTANT_NameAndType:
                     // TODO:
                     break;
-                //case Constants.CONSTANT_MethodHandle:
+                case Const.CONSTANT_MethodHandle:
                     // TODO:
                 //    break;
-                //case Constants.CONSTANT_MethodType:
+                case Const.CONSTANT_MethodType:
                     // TODO:
                 //    break;
                 default:
