@@ -10,3 +10,14 @@ This requires java8.
 
 mini demonstration:
 ![thumbs up](demo.gif)
+
+
+
+Step for using:
+
+1) Install maven
+2) to do mvn clean install
+3) mvn package and run
+
+
+I recommend to run this project in ide, because its not finished.
